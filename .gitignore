@@ -429,7 +429,7 @@ coverage.xml
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
+# Sphinx docs
 docs/_build/
 
 # PyBuilder
@@ -463,7 +463,7 @@ celerybeat-schedule
 .project
 .pydevproject
 
-# mkdocs documentation
+# mkdocs docs
 /site
 
 # mypy

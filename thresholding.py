@@ -10,17 +10,17 @@ rectangle_size = 30
 negative_offset = 10
 
 
-def main():
+def wheresmysheep_threshold(filename):
     """Main algorithm for this attempt using thresholding"""
 
     # load the image and convert to grayscale
-    img = cv2.imread("image.TIF")
+    img = cv2.imread(filename)
     print(img.shape)
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # do a binary threshold on the image based on provided variables above
     threshold_img = threshold(img_gray)
-    cv2.imwrite("threshold.png", threshold_img)
+    cv2.imwrite("images/result/threshold.png", threshold_img)
     print(threshold_img.shape)
 
     # locate the none zero pixels and group neighbouring to find the sheep locations
@@ -30,7 +30,7 @@ def main():
 
     # outline sheep in original image and save
     identified_sheep_img = outline_sheep(img, locations)
-    cv2.imwrite("identified_sheep_img.png", identified_sheep_img)
+    cv2.imwrite("images/result/identified_sheep_img.png", identified_sheep_img)
 
 
 def threshold(img):
@@ -93,5 +93,5 @@ def outline_sheep(image, coords):
     return identified_sheep_image
 
 
-if __name__ == '__main__':
-    main()
+#if __name__ == '__main__':
+#    wheresmysheep_threshold("images/image.TIF")

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/thresholding.iml" filepath="$PROJECT_DIR$/.idea/thresholding.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/wheresmysheep.iml" filepath="$PROJECT_DIR$/.idea/wheresmysheep.iml" />
     </modules>
   </component>
 </project>

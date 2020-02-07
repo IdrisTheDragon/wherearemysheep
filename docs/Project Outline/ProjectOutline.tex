@@ -24,7 +24,8 @@
 
 \name{Nathan Williams}
 \userid{naw21}
-\projecttitle{Where's my Sheep?}
+\projecttitle{Where's my Sheep? \\
+Research project in collaboration with biologists and farmers to look at automatically detecting sheep from aerial imagery.}
 \projecttitlememoir{Where's my Sheep?} %same as the project title or abridged version for page header
 \reporttitle{Project Outline}
 \version{1.0}
@@ -43,39 +44,69 @@
 
 
 %==============================================================================
-\section{Project description}
+\section{Project Description}
 %==============================================================================
-Locate and count sheep in ariael images from rededge camera, with rgb, infrared, rededge layers
-10cm per pixel approximatly, so each sheep only 20-30 pixels of an image.
-Can we get a method to work on white sheep, if we can does it also work on brown sheep? can we get it to work on other animals?
-What layers are most useful when identifying the sheep, could we combine layers.
+Locate and count sheep in ariael images from rededge camera, with rgb, infrared, rededge layers. 
+Sheep are a simple step to begin with as most are white, but we should consider more genral approaches so we can identify darker coloured sheep also, 
+this would leave room to identify other darker coloured mammels such as deer or cows.
+In the ariael images the scale is 10cm per pixel approximatly, so each sheep only 20-30 pixels of an image, but this can vary based on the height of the flight.
+We also have landscape images taken from the ground, can we use the same methods to identify sheep in these images?
 
-QGIS to view images, 
-Python, OpenCV to process images
-Tensorflow to train model.
-Jira scumban 
-github repository, wiki for meeting notes and blog/log
+\begin{itemize}
+    \item Can we get a method to work on white sheep, if we can does it also work on brown sheep?
+    \item Can we get it to work on other animals?
+    \item What colour spectrums are most useful when identifying the sheep, could we combine layers?
+    \item What happens when sheep move between stitched images?
+\end{itemize}
+ 
+Tools and workflow
+
+\begin{itemize}
+    \item QGIS to view images
+    \item Python, OpenCV to process images
+    \item Tensorflow to train model
+    \item Jira scumban 
+    \item github repository, wiki for meeting notes and blog/log
+\end{itemize}
 
 %==============================================================================
-\section{Proposed tasks}
+\section{Proposed Tasks}
 %==============================================================================
-Attempt some basic computer vision methods such as thresholding or template matching to identify sheep.
-Look into using a machine learning approach by training a model and giving it an image to try. 
-similar to face or object detection, find papers related to this that could be adapted to less detailed images.
+\begin{enumerate}
+    \item Attempt two basic computer vision methods thresholding or template matching to identify sheep. 
+    \item Write tests to determine failure point for these methods. e.g brightly lit backgrounds
+    \item Write tests to identify which colour spectrums make the sheep more obvious and get us the most use out of these methods.
+    \item Look into using a machine learning approach by training a model and giving it an image to try. 
+    \item Write tests to identify how good machine learning attempt is compared to the previous attempts.
+    \item Write tests to guage effectivness on other mammals e.g deer, cows.
+\end{enumerate}
+
+
+Similar to face or object detection, find papers related to this that could be adapted to less detailed images.
 investigate spectral signiture
 
+\begin{figure}[ht]
+    \caption{Project Roadmap}
+    \center
+    \includegraphics[width=0.9\textwidth]{where_smysheep_2020-02-07_0958am.png}
+\end{figure}
+
 
 %==============================================================================
-\section{Project deliverables}
+\section{Project Deliverables}
 %==============================================================================
-Project Outline, this document
-Project Report
-Python OpenCV script with thresholding attempt, for white sheep.
-Python OpenCv script with templating attempt.
-test scripts 
-half way demo
-Tensorflow model with scripts to apply it to image.
-Final Demo
+\begin{itemize}
+    \item Project Outline, this document
+    \item Project Report
+    \item Python OpenCV script with thresholding attempt, for white sheep.
+    \item Python OpenCv script with templating attempt.
+    \item Tests for the thresholding and templating attempt
+    \item Mid project Demo
+    \item Tensorflow model with scripts to apply it to image.
+    \item Tests for the final code
+    \item Final Demo
+\end{itemize}
+
 
 %
 % Start to comment out / remove the following lines. They are only provided for instruction for this example template.  You don't need the following section title, because it will be added as part of the bibliography section.
