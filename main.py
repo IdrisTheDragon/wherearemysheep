@@ -1,4 +1,4 @@
-from thresholding import Thresholding
+import thresholding
 
 import cv2
 import numpy as np
@@ -12,8 +12,7 @@ def three_channel_file():
     img = cv2.imread("images/image2.JPG", cv2.IMREAD_UNCHANGED)
     print(img.shape)
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    t = Thresholding(threshold_value=230, min_pixels_in_sheep=50)
-    locations, threshold_img = t.wheresmysheep_threshold(img_gray)
+    locations, threshold_img = thresholding.wheresmysheep_threshold(img_gray,threshold_value=230, min_pixels_in_sheep=50)
 
     # outline sheep in original image and save
     identified_sheep_img = outline.outline_sheep(img, locations)
@@ -26,8 +25,7 @@ def single_channel_small_tiff():
     print(img)
     img = cv2.normalize(img, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
     print(img)
-    t = Thresholding(threshold_value=120, min_pixels_in_sheep=10)
-    locations, threshold_img = t.wheresmysheep_threshold(img)
+    locations, threshold_img = thresholding.wheresmysheep_threshold(img,threshold_value=120, min_pixels_in_sheep=10)
 
     # outline sheep in original image and save
     identified_sheep_img = outline.outline_sheep(img, locations)
@@ -44,8 +42,7 @@ def large_file():
     print(image)
     image = cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
     print(image)
-    t = Thresholding(threshold_value=230)
-    locations, threshold_img = t.wheresmysheep_threshold(image)
+    locations, threshold_img = thresholding.wheresmysheep_threshold(image,threshold_value=230)
 
     identified_sheep_img = outline.outline_sheep(image, locations)
     cv2.imwrite("images/result/identified_sheep_img.png", identified_sheep_img)
