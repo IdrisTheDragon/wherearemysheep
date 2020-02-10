@@ -3,6 +3,7 @@ import math
 import cv2  # OpenCV
 import numpy as np  # Arrays (1D, 2D, and matrices)
 import matplotlib.pyplot as plt  # Plot
+import sys
 
 
 class Thresholding():
@@ -11,25 +12,15 @@ class Thresholding():
     def __init__(
             self,
             threshold_value: int = 120,
-            min_pixels_in_sheep: int = 10,
-            rectangle_size: int = 30,
-            negative_offset: int = 10):
+            min_pixels_in_sheep: int = 10,):
         self.threshold_value = threshold_value
         self.min_pixels_in_sheep = min_pixels_in_sheep
-        self.rectangle_size = rectangle_size
-        self.negative_offset = negative_offset
 
     def wheresmysheep_threshold(
             self,
-            filename:str):
-        """Main algorithm for this attempt using thresholding"""
-        # load the image and convert to grayscale
-        img = cv2.imread(filename)
-        print(img.shape)
-        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
+            image):
         # do a binary threshold on the image based on provided variables above
-        threshold_img = self.threshold(img_gray)
+        threshold_img = self.threshold(image)
         cv2.imwrite("images/result/threshold.png", threshold_img)
         print(threshold_img.shape)
         print("locating sheep")
@@ -39,10 +30,8 @@ class Thresholding():
         print(locations)
         print(len(locations))
 
-        # outline sheep in original image and save
-        identified_sheep_img = self.outline_sheep(img, locations)
-        cv2.imwrite("images/result/identified_sheep_img.png", identified_sheep_img)
-        return locations,identified_sheep_img,threshold_img
+        return locations, threshold_img
+
 
     def threshold(self, img):
         """Threshold the image based on values at top of script"""
@@ -56,6 +45,9 @@ class Thresholding():
 
         # for each none zero pixels
         for row in range(image.shape[0]):
+            sys.stdout.write('\r')
+            sys.stdout.write(str(row) + "/" + str(image.shape[0]))
+            sys.stdout.flush()
             for column in range(image.shape[1]):
                 if image[row, column] > 0:
                     # find and eliminate neighbours, making note of how many.
@@ -63,6 +55,8 @@ class Thresholding():
                     # if there are a certain number in a group it is probably a sheep so save the coordinates
                     if count > self.min_pixels_in_sheep:
                         coords.append([row, column, count])
+        sys.stdout.write('\n')
+        sys.stdout.flush()
         return coords
 
     def expand_remove(self, row, column, image):
@@ -89,16 +83,3 @@ class Thresholding():
                 if (coord[0], coord[1] - 1) not in checked:
                     queue.add((coord[0], coord[1] - 1))
         return count, image
-
-    def outline_sheep(self, image, coords):
-        """based on coordinates provided outline the sheep in the image"""
-        identified_sheep_image = image
-        for location in coords:
-            identified_sheep_image = cv2.rectangle(
-                identified_sheep_image,
-                (location[1] - self.negative_offset, location[0] - self.negative_offset),
-                (location[1] + self.rectangle_size, location[0] + self.rectangle_size),
-                (0, 0, 255),
-                3
-            )
-        return identified_sheep_image

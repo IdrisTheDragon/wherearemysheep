@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "eb94029bca64870e1580bda753789f71ab319390be3a8a7295f5b36e596701e6"
+            "sha256": "96fdb11d59a24f08ed50eec884d2c3db7013f90570fb9f92e93faf1d3f31ca6b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -64,6 +64,11 @@
                 "sha256:fe51b79da0062f8e9d49ed0182a626a7dc7a0cbca0328f612c6ee5e4711c81e4"
             ],
             "version": "==1.1.0"
+        },
+        "libtiff": {
+            "editable": true,
+            "git": "https://github.com/pearu/pylibtiff.git",
+            "ref": "51d6f2a41db654254397df1de6f9193e7317bce5"
         },
         "matplotlib": {
             "hashes": [
