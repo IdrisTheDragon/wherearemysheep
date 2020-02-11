@@ -3,13 +3,14 @@ import math
 import cv2  # OpenCV
 import numpy as np  # Arrays (1D, 2D, and matrices)
 import matplotlib.pyplot as plt  # Plot
-import sys
+import sys, time
 
 
 def wheresmysheep_threshold(
         image,
         threshold_value: int = 120,
         min_pixels_in_sheep: int = 10):
+
     # do a binary threshold on the image based on provided variables above
     threshold_img = threshold(image,threshold_value)
     cv2.imwrite("images/result/threshold.png", threshold_img)
@@ -33,6 +34,7 @@ def threshold(img,threshold_value):
 
 def sheep_locations(image, min_pixels_in_sheep):
     """ find the sheep coordinates, based on the none zero pixels groupings"""
+    start = time.perf_counter()
     coords = []
 
     # for each none zero pixels
@@ -49,6 +51,8 @@ def sheep_locations(image, min_pixels_in_sheep):
                     coords.append([row, column, count])
     sys.stdout.write('\n')
     sys.stdout.flush()
+    finish = time.perf_counter()
+    print(f'Finished in {round(finish - start, 3)} second(s)')
     return coords
 
 
