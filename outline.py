@@ -1,6 +1,6 @@
 import cv2
 
-extra=10
+extra=30
 
 
 def outline_sheep(image, coords):

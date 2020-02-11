@@ -42,7 +42,7 @@ def large_file():
     print(image)
     image = cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
     print(image)
-    locations, threshold_img = thresholding.wheresmysheep_threshold(image,threshold_value=230)
+    locations, threshold_img = thresholding.wheresmysheep_threshold(image,threshold_value=200, min_pixels_in_sheep=15)
 
     identified_sheep_img = outline.outline_sheep(image, locations)
     cv2.imwrite("images/result/identified_sheep_img.png", identified_sheep_img)

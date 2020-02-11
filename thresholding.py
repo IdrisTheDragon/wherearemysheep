@@ -143,9 +143,10 @@ def sheep_locations_helper(imageseg, min_pixels_in_sheep, segstart, start, end):
         for column in range(imageseg.shape[1]):
             if imageseg[row, column] > 0:
                 # find and eliminate neighbours, making note of how many.
-                count, image, center, size = expand_remove(row, column, imageseg)
+                count, imageseg, center, size = expand_remove(row, column, imageseg)
                 # if there are a certain number in a group it is probably a sheep so save the coordinates
-                if count > min_pixels_in_sheep:
+                max_pixels_in_sheep = 300
+                if max_pixels_in_sheep > count > min_pixels_in_sheep:
                     coords.append(((center[0] + segstart, center[1]), count, size))
     # sys.stdout.write('\n')
     # sys.stdout.flush()
@@ -156,7 +157,6 @@ def expand_remove(row, column, image):
     """find none zero neighbours of a point in a grid"""
     width = [row, row]
     height = [column, column]
-    center = [row, column]
     count = 0
     queue = {(row, column)}  # setup a set of coordinates ready to check
     checked = {0}  # setup a set to store our checked coords to save duplication
@@ -171,17 +171,13 @@ def expand_remove(row, column, image):
             # track max width of sheep and adjust center
             if coord[0] < width[0]:
                 width[0] = coord[0]
-                center[0] = center[0] + 0.5
             elif width[1] < coord[0]:
                 width[1] = coord[0]
-                center[0] = center[0] - 0.5
             # track max height of sheep and adjust center
             if coord[1] < height[0]:
                 height[0] = coord[1]
-                center[1] = center[1] + 0.5
             elif height[1] < coord[1]:
                 height[1] = coord[1]
-                center[1] = center[1] - 0.5
             # add its neighbours to queue ready to check
             if (coord[0] + 1, coord[1]) not in checked:
                 queue.add((coord[0] + 1, coord[1]))
@@ -191,4 +187,6 @@ def expand_remove(row, column, image):
                 queue.add((coord[0], coord[1] + 1))
             if (coord[0], coord[1] - 1) not in checked:
                 queue.add((coord[0], coord[1] - 1))
-    return count, image, (round(center[0]), round(center[1])), (width[1] - width[0], height[1] - height[0])
+    size = (width[1] - width[0], height[1] - height[0])
+    center = (width[0]+round(size[0]/2),height[0]+round(size[1]/2))
+    return count, image, center, size
