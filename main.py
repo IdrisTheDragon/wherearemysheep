@@ -32,7 +32,7 @@ def single_channel_small_tiff():
     cv2.imwrite("images/result/image.png", identified_sheep_img)
     return locations, identified_sheep_img, threshold_img
 
-
+#a change
 def large_file():
     tif = TIFF.open('images/image3.tif', mode='r')
     images = tif.read_image()
