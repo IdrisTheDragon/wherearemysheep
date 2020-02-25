@@ -9,7 +9,10 @@ verify_ssl = true
 opencv-python = "*"
 numpy = "*"
 matplotlib = "*"
-libtiff = { git = "https://github.com/pearu/pylibtiff.git", editable = true, ref = "master"}
+libtiff = {git = "https://github.com/pearu/pylibtiff.git",editable = true,ref = "master"}
+flask = "*"
+app = "*"
+routes = "*"
 
 [requires]
 python_version = "3.7"

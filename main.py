@@ -2,7 +2,7 @@ import thresholding
 
 import cv2
 import numpy as np
-from libtiff import TIFF
+from libtiff import TIFF,TIFFimage,TIFFfile,TiffChannelsAndFiles
 import outline
 
 
@@ -47,6 +47,25 @@ def large_file():
     identified_sheep_img = outline.outline_sheep(image, locations)
     cv2.imwrite("images/result/identified_sheep_img.png", identified_sheep_img)
 
+def merge_large():
+    tif = TIFF.open('images/image3.tif')
+    #images = tif.read_image()
+    #samples, sample_names = tif.get_samples()
+    #print(sample_names)
+    #print(samples)
+    img = cv2.imread('images/result/threshold.png', cv2.IMREAD_GRAYSCALE)
+    #print(images.shape)
+    #print(img.shape)
+
+    tif = TiffChannelsAndFiles(tif)
+    t = tif.get_info()
+    print()
+    #????
+
+    #print(images.shape)
+
+    tif = TIFFimage(img)
+    tif.write_file('images/merge.tif', compression='none')
 
 if __name__ == '__main__':
-    large_file()
+    merge_large()
