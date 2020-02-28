@@ -13,7 +13,7 @@ def outline_sheep(image, coords):
             image,
             (center[1] - round(size[1]/2) - extra, center[0] - round(size[0]/2) - extra),
             (center[1] + round(size[1]/2) + extra, center[0] + round(size[0]/2) + extra),
-            (0, 0, 255),
+            255,
             3
         )
     return image

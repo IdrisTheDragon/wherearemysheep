@@ -13,6 +13,7 @@ libtiff = {git = "https://github.com/pearu/pylibtiff.git",editable = true,ref = 
 flask = "*"
 app = "*"
 routes = "*"
+tifffile = "*"
 
 [requires]
 python_version = "3.7"
