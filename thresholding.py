@@ -1,131 +1,130 @@
-import math
+import concurrent.futures
+import sys
+import time
 
 import cv2  # OpenCV
 import numpy as np  # Arrays (1D, 2D, and matrices)
-import matplotlib.pyplot as plt  # Plot
-import sys
-import time
-import multiprocessing
-import concurrent.futures
+
+from sheepfinder import Finder
 
 
-def wheresmysheep_threshold(
-        image,
-        threshold_value: int = 120,
-        min_pixels_in_sheep: int = 10):
-    # do a binary threshold on the image based on provided variables above
-    threshold_img = threshold(image, threshold_value)
-    cv2.imwrite("images/result/threshold.png", threshold_img)
-    print(threshold_img.shape)
-    print("locating sheep")
+class Thresholding(Finder):
 
-    # locate the none zero pixels and group neighbouring to find the sheep locations
-    locations = sheep_locations(threshold_img, min_pixels_in_sheep)
-    print(locations)
-    print(len(locations))
+    def __init__(self,
+                 threshold_value: int = 200,
+                min_pixels_in_sheep: int = 10):
+        self.threshold_value = threshold_value
+        self.min_pixels_in_sheep = min_pixels_in_sheep
 
-    return locations, threshold_img
+    def findInImage(self, image):
+        print('doing the thing')
+        if image is None or len(image.shape) is not 2:
+            print('error with image')
+        # do a binary threshold on the image based on provided variables above
+        image = cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
+        _, threshold_img = cv2.threshold(image, self.threshold_value, 255, cv2.THRESH_BINARY)
+        print(threshold_img.shape)
+        print("locating sheep")
 
+        # locate the none zero pixels and group neighbouring to find the sheep locations
+        locations = self.__sheep_locations(threshold_img)
+        print(locations)
+        print(len(locations))
 
-def threshold(img, threshold_value):
-    """Threshold the image based on values at top of script"""
-    _, threshold_img = cv2.threshold(img, threshold_value, 255, cv2.THRESH_BINARY)
+        return locations, threshold_img
 
-    return threshold_img
+    def __sheep_locations(self, image):
+        """ find the sheep coordinates, based on the none zero pixels groupings"""
+        startTime = time.perf_counter()
+        coords = []
+        rows = image.shape[0]
+        segSize = 50
+        segments = round(rows / segSize)
+        iterations = round(segments / 4)
+        processedpixels = []
 
-
-def sheep_locations(image, min_pixels_in_sheep):
-    """ find the sheep coordinates, based on the none zero pixels groupings"""
-    startTime = time.perf_counter()
-    coords = []
-    rows = image.shape[0]
-    segSize = 50
-    segments = round(rows / segSize)
-    iterations = round(segments / 4)
-    processedpixels = []
-
-    with concurrent.futures.ProcessPoolExecutor() as executor:
-        # first set
-        args = ()
-        offset = 0
-        for itr in range(iterations):
-            offset = itr * 4
-            imageseg = image[offset * segSize:(offset + 4) * segSize]
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            # first set
+            args = ()
+            offset = 0
+            for itr in range(iterations):
+                offset = itr * 4
+                imageseg = image[offset * segSize:(offset + 4) * segSize]
+                segstart = offset * segSize
+                start = (offset + 1) * segSize
+                end = (offset + 3) * segSize
+                processedpixels.append((start, end))
+                args = args + ([imageseg, self.min_pixels_in_sheep, segstart, start, end],)
+            # end case
+            offset = offset + 4
+            imageseg = image[offset * segSize:min((offset + 4) * segSize, rows)]
             segstart = offset * segSize
             start = (offset + 1) * segSize
-            end = (offset + 3) * segSize
+            end = min((offset + 3) * segSize, rows)
             processedpixels.append((start, end))
-            args = args + ([imageseg, min_pixels_in_sheep, segstart, start, end],)
-        # end case
-        offset = offset + 4
-        imageseg = image[offset * segSize:min((offset + 4) * segSize, rows)]
-        segstart = offset * segSize
-        start = (offset + 1) * segSize
-        end = min((offset + 3) * segSize, rows)
-        processedpixels.append((start, end))
-        args = args + ([imageseg, min_pixels_in_sheep, segstart, start, end],)
+            args = args + ([imageseg, self.min_pixels_in_sheep, segstart, start, end],)
 
-        image1 = np.empty((0, image.shape[1]))
-        print("I just launched", len(args), "processess, lets wait for them to finish..")
-        sys.stdout.write('\r' + str(0) + "/" + str(len(args)))
-        sys.stdout.flush()
-        for count, result in enumerate(executor.map(arghelper, args)):
-            sys.stdout.write('\r' + str(count + 1) + "/" + str(len(args)))
+            image1 = np.empty((0, image.shape[1]))
+            print("I just launched", len(args), "processess, lets wait for them to finish..")
+            sys.stdout.write('\r' + str(0) + "/" + str(len(args)))
             sys.stdout.flush()
-            coords = coords + result[0]
-            image1 = np.concatenate((image1, result[1]), axis=0)
-        sys.stdout.write('\n')
-        sys.stdout.flush()
-        print()
-        print("pixels done so far", processedpixels)
-        print("Half done.. Found so far..", coords)
-        print()
+            for count, result in enumerate(executor.map(arghelper, args)):
+                sys.stdout.write('\r' + str(count + 1) + "/" + str(len(args)))
+                sys.stdout.flush()
+                coords = coords + result[0]
+                image1 = np.concatenate((image1, result[1]), axis=0)
+            sys.stdout.write('\n')
+            sys.stdout.flush()
+            print()
+            print("pixels done so far", processedpixels)
+            print("Half done.. Found so far..", coords)
+            print()
 
-        # second set
-        args = ()
-        offset = 0
-        # intial offset
-        imageseg = image[0:2 * segSize]
-        segstart = 0
-        start = 0
-        end = 1 * segSize
-        processedpixels.append((start, end))
-        args = args + ([imageseg, min_pixels_in_sheep, segstart, start, end],)
-        # full cases
-        for itr in range(iterations - 1):
-            offset = (itr * 4) + 2
-            imageseg = image[offset * segSize:(offset + 4) * segSize]
+            # second set
+            args = ()
+            offset = 0
+            # intial offset
+            imageseg = image[0:2 * segSize]
+            segstart = 0
+            start = 0
+            end = 1 * segSize
+            processedpixels.append((start, end))
+            args = args + ([imageseg, self.min_pixels_in_sheep, segstart, start, end],)
+            # full cases
+            for itr in range(iterations - 1):
+                offset = (itr * 4) + 2
+                imageseg = image[offset * segSize:(offset + 4) * segSize]
+                segstart = offset * segSize
+                start = (offset + 1) * segSize
+                end = (offset + 3) * segSize
+                processedpixels.append((start, end))
+                args = args + ([imageseg, self.min_pixels_in_sheep, segstart, start, end],)
+            # end caseAttributeError: Can't pickle local object
+            offset = offset + 4
             segstart = offset * segSize
+            segend = min((offset + 4) * segSize, rows)
+            imageseg = image[segstart:segend]
+
             start = (offset + 1) * segSize
-            end = (offset + 3) * segSize
+            end = min((offset + 3) * segSize, rows)
             processedpixels.append((start, end))
-            args = args + ([imageseg, min_pixels_in_sheep, segstart, start, end],)
-        # end caseAttributeError: Can't pickle local object
-        offset = offset + 4
-        segstart = offset * segSize
-        segend = min((offset + 4) * segSize, rows)
-        imageseg = image[segstart:segend]
+            args = args + ([imageseg, self.min_pixels_in_sheep, segstart, start, end],)
 
-        start = (offset + 1) * segSize
-        end = min((offset + 3) * segSize, rows)
-        processedpixels.append((start, end))
-        args = args + ([imageseg, min_pixels_in_sheep, segstart, start, end],)
-
-        print("oops I just launched another", len(args), "processess, lets wait for them to finish..")
-        sys.stdout.write('\r' + str(0) + "/" + str(len(args)))
-        sys.stdout.flush()
-        for result in executor.map(arghelper, args):
-            sys.stdout.write('\r' + str(count + 1) + "/" + str(len(args)))
+            print("oops I just launched another", len(args), "processess, lets wait for them to finish..")
+            sys.stdout.write('\r' + str(0) + "/" + str(len(args)))
             sys.stdout.flush()
-            coords = coords + result[0]
-        sys.stdout.write('\n')
-        sys.stdout.flush()
-        print("all pixels:", processedpixels)
-        executor.shutdown()
-    finish = time.perf_counter()
-    print(f'Finished in {round(finish - startTime, 3)} second(s)')
-    print()
-    return coords
+            for count, result in enumerate(executor.map(arghelper, args)):
+                sys.stdout.write('\r' + str(count + 1) + "/" + str(len(args)))
+                sys.stdout.flush()
+                coords = coords + result[0]
+            sys.stdout.write('\n')
+            sys.stdout.flush()
+            print("all pixels:", processedpixels)
+            executor.shutdown()
+        finish = time.perf_counter()
+        print(f'Finished in {round(finish - startTime, 3)} second(s)')
+        print()
+        return coords
 
 
 def arghelper(p):
@@ -151,7 +150,6 @@ def sheep_locations_helper(imageseg, min_pixels_in_sheep, segstart, start, end):
     # sys.stdout.write('\n')
     # sys.stdout.flush()
     return coords, imageseg
-
 
 def expand_remove(row, column, image):
     """find none zero neighbours of a point in a grid"""
