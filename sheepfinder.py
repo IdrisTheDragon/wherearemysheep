@@ -34,39 +34,68 @@ class ImageManager:
         else:
             print('invalid file type:',self.filetype)
 
-    def find(self, method: Finder, layer:int=0):
+    def singleLayerFind(self, method: Finder, layer:int=0):
         """
         find the the mammel in the Image
 
         method - the finder to find the mammal
         layer -  the layer or sample of the image to use.
         """
-        image = None
+        prepared_image = None
         if len(self.image.shape) > 2: #atleast 3 dimesions in array e.g 100,100,5
             if self.image.shape[0] > self.image.shape[2]:# one image array with multi samples e.g 100,100,5
                 if self.image.shape[2] > layer: #check sample that exists
-                    image = self.image[:,:,layer]
+                    prepared_image = self.image[:,:,layer]
                 else:
                     print('sample:',layer,' out of bounds:',self.image.shape[2], 'from the following multi sample image', self.image.shape)
                     return
             elif self.image.shape[0] < self.image.shape[2]: #image with more than one layer e.g 5,100,100
                 if self.image.shape[0]>layer: #check layer exisits
-                    image = self.image[layer]
+                    prepared_image = self.image[layer]
                 else:
                     print('layer:',layer,' out of bounds:',self.image.shape[0], 'from the following multi layer image', self.image.shape)
                     return
             else:
                 print('Unrecognised dimesnsions:',self.image.shape)
         elif len(self.image.shape) == 2: # basic 2 dimesional array
-            image = self.image
+            prepared_image = self.image
         else:
             print('invalid dimensions in image', self.image.shape)
             return
 
-        if image is None:
-            print('you fucked up somewhere')
+        if prepared_image is None:
+            print('something went wrong')
 
-        self.locations, self.intermediaryImage = method.findInImage(image)
+        self.locations, self.intermediaryImage = method.findInImage(prepared_image)
+        return self.locations, self.intermediaryImage
+
+    def combinedSingleLayerFind(self, method: Finder, layers=[1.]):
+        prepared_image = None
+        if len(self.image.shape) > 2: #check number of dimensions in image
+            if self.image.shape[0] < len(layers) or self.image.shape[2] < len(layers): #check number of layers provided is less than or equal to the number of layers in image
+                print("too many layers given")
+                return
+            count = 0.
+            for l in layers:
+                count=count+l
+            if count != 1.:
+                print("layers do not sum to one:",layers,"sum:",count)
+                return
+            for c,l in enumerate(layers):
+                if self.image.shape[0] > self.image.shape[2]:
+                    if prepared_image is None:
+                        prepared_image = l*self.image[:,:,c]
+                    else:
+                        prepared_image = prepared_image + l*self.image[:,:,c]
+                else:
+                    if prepared_image is None:
+                        prepared_image = l * self.image[c]
+                    else:
+                        prepared_image = prepared_image + l * self.image[c]
+        else:
+            prepared_image = self.image
+
+        self.locations, self.intermediaryImage = method.findInImage(prepared_image)
         return self.locations, self.intermediaryImage
 
     def outline_mammal(self, baseImage:str= 'blank', padding=30):

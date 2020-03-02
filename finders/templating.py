@@ -31,4 +31,4 @@ class Templating(Finder):
         for cnt in contours:
             (x, y, w, h) = cv2.boundingRect(cnt)
             locations.append(Location((y,x),size=(h,w)))
-        return locations, cv2.merge((d2,d,d))
+        return locations, cv2.merge((d2,d,image))
