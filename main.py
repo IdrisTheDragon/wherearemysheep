@@ -1,35 +1,60 @@
-import thresholding
+from finders import Thresholding, Templating
 
-from sheepfinder import MammalFinder
+from sheepfinder import ImageManager
+
+import numpy as np
+import cv2
 
 
-def three_channel_file():
+def three_channel_file_th():
     """Main algorithm for this attempt using thresholding"""
 
-    m = thresholding.Thresholding(threshold_value=180)
-    s: MammalFinder = MammalFinder("images/image2.JPG")
+    m = Thresholding(threshold_value=180)
+    s: ImageManager = ImageManager("images/image2.JPG")
     s.find(m, 0)
     s.saveIntermidiary('images/result/threshold2.png')
-    s.outline_sheep(baseImage='original')
+    s.outline_mammal(baseImage='original')
     s.saveOutlined('images/result/outline2.png')
 
 
-def single_channel_small_tiff():
-    m = thresholding.Thresholding(threshold_value=120,min_pixels_in_sheep=10)
-    s: MammalFinder = MammalFinder("images/image.TIF")
+def single_channel_small_tiff_th():
+    m = Thresholding(threshold_value=120, min_pixels_in_sheep=10)
+    s: ImageManager = ImageManager("images/image.TIF")
     s.find(m, 0)
     s.saveIntermidiary('images/result/threshold.tif')
-    s.outline_sheep(baseImage='original')
+    s.outline_mammal(baseImage='original')
     s.saveOutlined('images/result/outline.tif')
 
-def large_file():
-    m = thresholding.Thresholding(threshold_value=220)
-    s: MammalFinder = MammalFinder("images/image3.tif")
+def large_file_th():
+    m = Thresholding(threshold_value=220)
+    s: ImageManager = ImageManager("images/image3.tif")
     s.find(m,3)
     s.saveIntermidiary('images/threshold.tif')
-    s.outline_sheep()
+    s.outline_mammal()
     s.saveOutlined('images/outline.tif')
 
+def single_channel_small_tiff():
+    template = np.zeros((30,30),dtype=np.uint8)
+    template = cv2.circle(template,(15,15),10,255,cv2.FILLED)
+    m = Templating(template,0.75)
+    s: ImageManager = ImageManager("images/image.TIF")
+    s.find(m, 0)
+    s.saveIntermidiary('images/result/templating.tif')
+    s.outline_mammal(baseImage='original')
+    s.saveOutlined('images/result/outlinetemplating.tif')
+
+def large_file():
+    template = np.zeros((30, 30), dtype=np.uint8)
+    #template = cv2.circle(template, (15, 15), 7, 200, cv2.FILLED)
+    template = cv2.circle(template, (15, 15), 5, 255, cv2.FILLED)
+    m = Templating(template,0.50)
+    s: ImageManager = ImageManager("images/image3.tif")
+    s.find(m,1)
+    s.saveIntermidiary('images/templating.tif')
+    s.outline_mammal(padding=10)
+    s.saveOutlined('images/outlinetemplating.tif')
+
 if __name__ == '__main__':
-    three_channel_file()
+    large_file()
+    #single_channel_small_tiff()
 

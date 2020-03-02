@@ -1,0 +1,53 @@
+@startuml
+class ImageManager{
+    -image:ImageArray
+    -tags:Tuple[]
+    -fileType:str
+    -locations:Locations[]
+
+    +__init__(filepath:str)
+    +find(m:Finder,parms*):locations:Location[],intermidiary:ImageArray
+    +outlineMammal()
+    +saveIntermidiary(filepath:str):void
+    +saveOutlined(filepath:str):void
+}
+
+package server{
+    class Server{
+        -serverUI:ServerUI
+        -serverAPI:ServerAPI
+    }
+    class ServerUI{
+
+    }
+    class ServerAPI{
+
+    }
+}
+
+package finders{
+    interface Finder{
+        +find(image:ImageArray):locations:Location[],intermidiary:ImageArray
+    }
+    class Thresholding{
+        +min_pixels_in_sheep:int
+        +threshold_value:int
+        +__init__(min_pixels_in_sheep:int,threshold_value:int)
+        +find(image:ImageArray):locations:Location[],intermidiary:ImageArray
+        -__sheep_locations(image:ImageArray):
+        -arghelper()
+        -sheep_locations_helper()
+        -expandRemove()
+    }
+    class Templating{
+        +template:ImageArray
+        +find(image:ImageArray)
+    }
+}
+Thresholding ..> Finder
+Templating ..> Finder
+Server --* ImageManager
+Server --* Finder
+Server --> ServerAPI
+Server --> ServerUI
+@enduml

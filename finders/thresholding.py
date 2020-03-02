@@ -5,7 +5,8 @@ import time
 import cv2  # OpenCV
 import numpy as np  # Arrays (1D, 2D, and matrices)
 
-from sheepfinder import Finder
+from finders.finder import Finder
+from location import Location
 
 
 class Thresholding(Finder):
@@ -146,7 +147,8 @@ def sheep_locations_helper(imageseg, min_pixels_in_sheep, segstart, start, end):
                 # if there are a certain number in a group it is probably a sheep so save the coordinates
                 max_pixels_in_sheep = 300
                 if max_pixels_in_sheep > count > min_pixels_in_sheep:
-                    coords.append(((center[0] + segstart, center[1]), count, size))
+                    l = Location((center[0] + segstart, center[1]),count,size)
+                    coords.append(l)
     # sys.stdout.write('\n')
     # sys.stdout.flush()
     return coords, imageseg

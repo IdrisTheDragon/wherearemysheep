@@ -1,19 +1,12 @@
 from tifffile import TiffFile, TiffWriter, TiffTag
 import cv2
-import abc
 import numpy as np
 
-
-class Finder(abc.ABC):
-    """
-    Abstract class for a Finder to find things in images
-    """
-    @abc.abstractmethod
-    def findInImage(self,image):
-        pass
+from finders import Finder
+from location import Location
 
 
-class MammalFinder:
+class ImageManager:
     """
     Loads image and finds runs a finder in the image data and allows you to save the results.
     """
@@ -26,9 +19,8 @@ class MammalFinder:
         """
         self.filetype:str = filepath[len(filepath)-3:].upper()
         self.tags = None
-        self.locations = None
+        self.locations:[Location] = None
         self.intermediaryImage = None
-        self.identified_sheep_img = None
         self.outlined = None
         if self.filetype == 'TIF':
             print('found tif')
@@ -42,7 +34,7 @@ class MammalFinder:
         else:
             print('invalid file type:',self.filetype)
 
-    def find(self, method:Finder,layer:int=0):
+    def find(self, method: Finder, layer:int=0):
         """
         find the the mammel in the Image
 
@@ -77,7 +69,7 @@ class MammalFinder:
         self.locations, self.intermediaryImage = method.findInImage(image)
         return self.locations, self.intermediaryImage
 
-    def outline_sheep(self,baseImage:str='blank',padding=30):
+    def outline_mammal(self, baseImage:str= 'blank', padding=30):
         """
         based on coordinates provided outline the sheep in the image
 
@@ -105,8 +97,10 @@ class MammalFinder:
         print(outlined.shape)
 
         for location in self.locations:
-            center = location[0]
-            size = location[2]
+            center = location.coords
+            size = location.size
+            if size is None:
+                size = (25,25)
 
             outlined = cv2.rectangle(
                 outlined,
