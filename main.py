@@ -44,9 +44,12 @@ def single_channel_small_tiff():
     s.saveOutlined('images/result/outlinetemplating.tif')
 
 def large_file():
-    template = np.zeros((30, 30), dtype=np.uint8)
+    templateSize= 30
+    template = np.full((templateSize, templateSize), 0 ,dtype=np.uint8)
     #template = cv2.circle(template, (15, 15), 7, 200, cv2.FILLED)
-    template = cv2.circle(template, (15, 15), 5, 255, cv2.FILLED)
+    #template = cv2.circle(template, (int(templateSize/2), int(templateSize/2)), 5, 255, cv2.FILLED)
+    template = cv2.ellipse(img=template, center=(int(templateSize/2), int(templateSize/2)), axes=(4,8),angle=90,startAngle=0,endAngle=360,color=255,thickness=cv2.FILLED)
+    cv2.imwrite('images/template.png',template)
     m = Templating(template,0.50)
     s: ImageManager = ImageManager("images/image3.tif")
     s.find(m,1)

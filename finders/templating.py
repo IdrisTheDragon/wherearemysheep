@@ -24,11 +24,11 @@ class Templating(Finder):
         print(m,M,m_1,M_1)
 
         locations = []
-        _,d2 = cv2.threshold(d, M-0.3, 1, cv2.THRESH_BINARY)
+        _,d2 = cv2.threshold(d, self.threshold, 1, cv2.THRESH_BINARY)
         d2 = cv2.normalize(d2, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
+        d = cv2.normalize(d, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
         contours, hier = cv2.findContours(d2, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         for cnt in contours:
             (x, y, w, h) = cv2.boundingRect(cnt)
-            if w > 3 and h > 3:
-                locations.append(Location((y,x),size=(h,w)))
-        return locations, d2
+            locations.append(Location((y,x),size=(h,w)))
+        return locations, cv2.merge((d2,d,d))
