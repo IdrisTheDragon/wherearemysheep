@@ -78,7 +78,7 @@ class ImageManager:
             count = 0.
             for l in layers:
                 count=count+l
-            if count != 1.:
+            if 1. < count < 0.9999:
                 print("layers do not sum to one:",layers,"sum:",count)
                 return
             for c,l in enumerate(layers):
@@ -96,6 +96,33 @@ class ImageManager:
             prepared_image = self.image
 
         self.locations, self.intermediaryImage = method.findInImage(prepared_image)
+        return self.locations, self.intermediaryImage
+
+    def multiLayerFind(self, method: Finder):
+        variance = 10
+        if len(self.image.shape) > 2:
+            results = []
+            for i in range(0,min(self.image.shape[0],self.image.shape[2])):
+                if self.image.shape[0] > self.image.shape[2]:
+                    prepared_image = self.image[:,:,i]
+                else:
+                    prepared_image = self.image[i]
+                locations, self.intermediaryImage = method.findInImage(prepared_image) # only store last intermediaryImage
+                print(locations)
+                for l in locations:
+                    found_pair = False
+                    for r in results:
+                        if r.coords[0] + variance > l.coords[0] > r.coords[0] - variance and r.coords[1] + variance > l.coords[1] > r.coords[1] - variance:
+                            r.detected = r.detected + 1
+                            found_pair = True
+                            break
+                    if not found_pair:
+                         results.append(l)
+
+            self.locations = filter(lambda x : x.detected > 1,results)
+        else:
+            self.locations, self.intermediaryImage = method.findInImage(self.image)
+
         return self.locations, self.intermediaryImage
 
     def outline_mammal(self, baseImage:str= 'blank', padding=30):
