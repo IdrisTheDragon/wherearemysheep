@@ -211,6 +211,17 @@ class ImageManager:
         else:
             print('file type not handled:', saveType,'. try one of {\'.tif\',\'.png\',\'.jpg\'} at end of the filepath')
 
+    def extract_sheep(self,folder:str):
+        if self.locations is None:
+            print("No locations")
+            return
+        for location in self.locations:
+            sheep = self.image[location.coords[0]-int(location.size[0]/2)-20:location.coords[0]+int(location.size[0]/2)+20,
+                    location.coords[1]-int(location.size[1]/2)-20:location.coords[1]+int(location.size[1]/2)+20
+                    ,0]
+            cv2.imwrite(folder + "/sheep_"+str(location.coords)+".tif",sheep)
+
+
 def fileInfo(tif:TiffFile):
     """
     prints out useful tiff info
