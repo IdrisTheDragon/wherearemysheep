@@ -113,6 +113,6 @@ def analyser():
 if __name__ == '__main__':
     #large_file()
     #single_channel_small_tiff()
-    #extracter()
+    extracter()
     #analyser()
-    miniexample()
+    #miniexample()

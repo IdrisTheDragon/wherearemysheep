@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Where's My Sheep</title>
+</head>
+<body>
+<h1>Where's My Sheep</h1>
+<h2>Managing images on server</h2>
+<ul>
+    <li><a href="/uploads">/uploads</a>: lists files on server</li>
+    <li>/uploads/'filename' : returns the file specified from the server</li>
+    <li><a href="/upload">/upload</a>: upload a file</li>
+    <li><a href="/clearuploads">/clearuploads</a> clears the uploaded files folder.</li>
+</ul>
+<h2>Use one of the following methods and the arguments listed</h2>
+<ul>
+    <li>
+        <a href="/thresholding">thresholding method</a>
+        <ul>
+            <li>filename: *required* the file to process</li>
+            <li>templateSize: the size of template to use</li>
+        </ul>
+    </li>
+    <li>
+        <a href="/templating">templating method</a>
+        <ul>
+            <li>filename: *required* the file to process</li>
+            <li>threshold: the threshold value for example 220</li>
+        </ul>
+    </li>
+</ul>
+
+
+
+</body>
+</html>
