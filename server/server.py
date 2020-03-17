@@ -25,6 +25,8 @@ def uploaded_file(filename):
 
 @app.route('/clearuploads')
 def clear_uploads():
+    os.rmtree(app.config['UPLOAD_FOLDER'])
+    os.mkdir(app.config['UPLOAD_FOLDER'])
     return "todo implement"
 
 @app.route('/uploads')
