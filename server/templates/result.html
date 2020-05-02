@@ -1,9 +1,16 @@
-<html>
-    <head>
-        <title>{{ title }} - results</title>
-    </head>
-    <body>
-        <a href="uploads/{{ outlinedFile }}">{{ outlinedFile }}</a>
-        <a href="uploads/{{ intermidaryFile }}">{{ intermidaryFile }}</a>
-    </body>
-</html>
+{% extends "layout.html" %}
+{% block title %}Result{% endblock %}
+{% block subtitle %}Result{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="box">
+    <h2 class="subtitle">Image processing completed successfully.</h2>
+    <ul>
+        <li><a href="uploads/{{ outlinedFile }}" class="button">{{ outlinedFile }}</a></li>
+        <li><a href="uploads/{{ intermidaryFile }}" class="button">{{ intermidaryFile }}</a></li>
+    </ul>
+</div>
+<a href="/" class="button">back</a>
+{% endblock %}

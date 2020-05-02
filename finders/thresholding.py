@@ -27,12 +27,22 @@ class Thresholding(Finder):
         print(threshold_img.shape)
         print("locating sheep")
 
-        # locate the none zero pixels and group neighbouring to find the sheep locations
-        locations = self.__sheep_locations(threshold_img)
+        locations = []
+        contours, hier = cv2.findContours(threshold_img, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        for cnt in contours:
+            (x, y, w, h) = cv2.boundingRect(cnt)
+            if w > 5 and h> 5:
+                locations.append(Location((y, x), size=(h, w)))
         print(locations)
         print(len(locations))
-
         return locations, threshold_img
+
+        # locate the none zero pixels and group neighbouring to find the sheep locations
+        #locations = self.__sheep_locations(threshold_img)
+        #print(locations)
+        #print(len(locations))
+
+        #return locations, threshold_img
 
     def __sheep_locations(self, image):
         """ find the sheep coordinates, based on the none zero pixels groupings"""

@@ -1,4 +1,6 @@
 import os
+import shutil
+
 import cv2
 import numpy as np
 from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template
@@ -8,7 +10,7 @@ from finders import Templating, Thresholding
 from sheepfinder import ImageManager
 
 UPLOAD_FOLDER = 'images/uploaded'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'tif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'tif','TIF'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -18,25 +20,37 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/uploads/<filename>')
+@app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
 @app.route('/clearuploads')
 def clear_uploads():
-    os.rmtree(app.config['UPLOAD_FOLDER'])
-    os.mkdir(app.config['UPLOAD_FOLDER'])
-    return "todo implement"
+    shutil.rmtree(app.root_path + '/' + app.config['UPLOAD_FOLDER'])
+    if not os.path.exists(app.root_path + '/' + app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.root_path + '/' + app.config['UPLOAD_FOLDER'])
+    return redirect('/')
+
+@app.route('/delete/<path:filename>')
+def delete(filename):
+    if '/' in filename:
+        return redirect('/')
+
+    filepath = app.root_path + '/' + app.config['UPLOAD_FOLDER'] + '/' + filename
+    if os.path.exists(filepath):
+        os.remove(filepath)
+    return redirect('/')
 
 @app.route('/uploads')
 def uploads_list():
     list_of_files = {}
-    for filename in os.listdir(UPLOAD_FOLDER):
+    if not os.path.exists(app.root_path + '/' + app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.root_path + '/' + app.config['UPLOAD_FOLDER'])
+    for filename in os.listdir(app.root_path + '/' + app.config['UPLOAD_FOLDER']):
         list_of_files[filename] = '/uploads/' + filename
     return list_of_files
 
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/upload', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -50,16 +64,19 @@ def upload_file():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
+            if not os.path.exists(app.root_path + '/' + app.config['UPLOAD_FOLDER']):
+                os.makedirs(app.root_path + '/' + app.config['UPLOAD_FOLDER'])
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
-    return render_template('upload.html')
+            file.save(os.path.join(app.root_path + '/' + app.config['UPLOAD_FOLDER'], filename))
+    return redirect('/')
+
 
 @app.route('/')
 @app.route('/index')
+@app.route('/home')
 def index():
-    return render_template('home.html')
+    images = uploads_list()
+    return render_template('home.html',images=images)
 
 
 @app.route('/templating')
@@ -77,7 +94,7 @@ def templating():
     template = cv2.circle(template, (int(templateSize / 2), int(templateSize / 2)), 5, 255, cv2.FILLED)
     m = Templating(template, 0.50)
     filename = request.args['filename']
-    filepath = UPLOAD_FOLDER+'/'+ secure_filename(filename)
+    filepath = app.root_path + '/' + app.config['UPLOAD_FOLDER'] + '/' + secure_filename(filename)
 
     im = ImageManager(filepath)
     im.singleLayerFind(m,0)
@@ -104,7 +121,7 @@ def thresholding():
     m = Thresholding(threshold_value=threshold)
 
     filename = request.args['filename']
-    filepath = UPLOAD_FOLDER + '/' + secure_filename(filename)
+    filepath = app.root_path + '/' + app.config['UPLOAD_FOLDER'] + '/' + secure_filename(filename)
     im: ImageManager = ImageManager(filepath)
     im.singleLayerFind(m, 0)
     thresholdFile = filename.rsplit('.', 1)[0] + '_threshold.' + filename.rsplit('.', 1)[1]

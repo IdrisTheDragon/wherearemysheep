@@ -1,37 +1,194 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Where's My Sheep</title>
-</head>
-<body>
-<h1>Where's My Sheep</h1>
-<h2>Managing images on server</h2>
-<ul>
-    <li><a href="/uploads">/uploads</a>: lists files on server</li>
-    <li>/uploads/'filename' : returns the file specified from the server</li>
-    <li><a href="/upload">/upload</a>: upload a file</li>
-    <li><a href="/clearuploads">/clearuploads</a> clears the uploaded files folder.</li>
-</ul>
-<h2>Use one of the following methods and the arguments listed</h2>
-<ul>
-    <li>
-        <a href="/thresholding">thresholding method</a>
-        <ul>
-            <li>filename: *required* the file to process</li>
-            <li>templateSize: the size of template to use</li>
-        </ul>
-    </li>
-    <li>
-        <a href="/templating">templating method</a>
-        <ul>
-            <li>filename: *required* the file to process</li>
-            <li>threshold: the threshold value for example 220</li>
-        </ul>
-    </li>
-</ul>
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block subtitle %}Home{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="box">
+    <h2 class="subtitle">Manage available images</h2>
+        {% for image, url in images.items() %}
+            <div class="buttons has-addons">
+                <a class="button" href="{{ url }}">{{ image }}</a>
+                <a href="/delete/{{ image }}" class="button is-danger is-outlined">
+    <span class="icon is-small">
+      <i class="fas fa-times"></i>
+    </span>
+                </a>
+            </div>
+
+        {% endfor %}
+
+    <!--<a href="/uploads" class="button" title="list files on server">List Uploads</a>-->
+    <form method=post enctype=multipart/form-data action="/upload">
+        <div class="field has-addons">
+            <div class="control">
+                <div class="file has-name" id="file-upload">
+                    <label class="file-label">
+                        <input class="file-input" type="file" name="file">
+                        <span class="file-cta">
+      <span class="file-icon">
+        <i class="fas fa-upload"></i>
+      </span><span class="file-label">Choose a file…</span></span>
+                    </label><span class="file-name">No file selected</span>
+                </div>
+            </div>
+            <div class="control">
+                <button class="button is-primary">Upload</button>
+            </div>
+        </div>
+    </form>
+    <script>
+  const fileInput = document.querySelector('#file-upload input[type=file]');
+  fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+      const fileName = document.querySelector('#file-upload .file-name');
+      fileName.textContent = fileInput.files[0].name;
+    }
+  }
 
 
 
-</body>
-</html>
+    </script>
+
+    <a href="/clearuploads" class="button is-danger" title="clears the uploaded files folder.">Clear
+        Uploads</a>
+</div>
+<div class="box">
+
+    <style>
+        #tabs-with-content .tabs:not(:last-child) {
+  margin-bottom: 0;
+}
+
+#tabs-with-content .tab-content {
+  padding: 1rem;
+  display: none;
+}
+
+#tabs-with-content .tab-content.is-active {
+  display: block;
+}
+
+
+    </style>
+    <h2 class="subtitle">Use one of the following methods and optional arguments listed to find the sheep in
+        images.</h2>
+    <p>Note: depending on size of image it might take a while.</p>
+    <div id="tabs-with-content">
+        <div class="tabs is-boxed">
+            <ul>
+                <li class="is-active"><a>Thresholding</a></li>
+                <li><a>Templating</a></li>
+            </ul>
+        </div>
+        <div>
+            <section class="tab-content">
+                <h3 class="subtitle">Thresholding method</h3>
+                <form action="/thresholding">
+                    <div class="field">
+                        <label class="label">Filename</label>
+                        <div class="control">
+                            <div class="select is-danger">
+                                <select name="filename">
+                                    {% for image, url in images.items() %}
+                                    <option>{{ image }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <p class="help is-danger">
+                            This field is required
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Template Size</label>
+                        <div class="control">
+                            <input class="input" type="number" name="templateSize"
+                                   placeholder="the size of template to use">
+                        </div>
+                    </div>
+                    <div class="control">
+                        <button class="button is-link">Submit</button>
+                    </div>
+                </form>
+            </section>
+            <section class="tab-content">
+                <h3 class="subtitle">Templating method</h3>
+                <form action="/templating">
+                    <div class="field">
+                        <label class="label">Filename</label>
+                        <div class="control">
+                            <div class="select is-danger">
+                                <select name="filename">
+                                    {% for image, url in images.items() %}
+                                    <option>{{ image }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <p class="help is-danger">
+                            This field is required
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Threshold value</label>
+                        <div class="control">
+                            <input class="input" type="number" name="threshold"
+                                   placeholder="the threshold value for example 220">
+                        </div>
+                    </div>
+                    <div class="control">
+                        <button class="button is-link">Submit</button>
+                    </div>
+                </form>
+            </section>
+            <section class="tab-content">Videos content</section>
+            <section class="tab-content">Documents content</section>
+        </div>
+    </div>
+    <script>
+    //https://eiji.dev/bulma-tabs-with-content.html
+        let tabsWithContent = (function () {
+  let tabs = document.querySelectorAll('.tabs li');
+  let tabsContent = document.querySelectorAll('.tab-content');
+
+  let deactvateAllTabs = function () {
+    tabs.forEach(function (tab) {
+      tab.classList.remove('is-active');
+    });
+  };
+
+  let hideTabsContent = function () {
+    tabsContent.forEach(function (tabContent) {
+      tabContent.classList.remove('is-active');
+    });
+  };
+
+  let activateTabsContent = function (tab) {
+    tabsContent[getIndex(tab)].classList.add('is-active');
+  };
+
+  let getIndex = function (el) {
+    return [...el.parentElement.children].indexOf(el);
+  };
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      deactvateAllTabs();
+      hideTabsContent();
+      tab.classList.add('is-active');
+      activateTabsContent(tab);
+    });
+  })
+
+  tabs[0].click();
+})();
+
+
+    </script>
+
+
+</div>
+
+{% endblock %}
