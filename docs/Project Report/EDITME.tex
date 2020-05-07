@@ -1,0 +1,12 @@
+
+opencv only designed to handle standard RGB images so we need something else to handle the geoTIFF files.
+
+An initial trial with PyLibTiff \cite{pylibtiff} which is wrapper for the libtiff library to Python using ctypes, resulted in issues with being able to read the geo tags in the files, and saving and transferring the data to the processed files.
+
+Settled on using tifffle.py \cite{tifffle} as it was much simpler to use and had all the features I needed.
+
+
+opencv pros and cons, limitations
+languages? python quick and easy scripting, 
+
+

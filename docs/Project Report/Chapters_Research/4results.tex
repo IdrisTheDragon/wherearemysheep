@@ -1,0 +1,44 @@
+\chapter{Results and Conclusions}
+%TC:ignore
+\begin{comment}
+This section should discuss issues you encountered as you tried to implement your experiments. What were the results of running the experiments? What conclusions can you draw from these results? What graphs or other information have you assessed regarding your experiments? Discuss those.
+
+During the work, you might have found that elements of your experiments were unnecessary or overly complex; perhaps third-party libraries were available that simplified some of the functions that you intended to implement. If things were easier in some areas, then how did you adapt your project to take account of your findings?
+
+It is more likely that things were more complex than you first thought. In particular, were there any problems or difficulties that you found during implementation that you had to address? Did such problems simply delay you or were they more significant?
+
+If you had multiple experiments to run, it may be sensible to discuss each experiment in separate sections.
+\end{comment}
+%TC:endignore
+\section{Thresholding Results}
+
+Manual adjustments of the threshold value is required on an image by image basis to minimise false positives and false negatives. The issue with this method though is the that it not only picks up the sheep it also picks up anything bright some examples in fig.\ref{threshfailures}.
+    
+    \begin{figure}
+        \centering
+        \includegraphics[width=7cm]{images/threshfail1.png}
+        \includegraphics[width=7cm]{images/threshfail2.png}
+        \includegraphics[width=6cm]{images/threshfail3.png}
+        \caption{Caption}
+        \label{fig:my_label}
+    \end{figure}
+
+
+\section{Templating Results}
+
+But there is have similar issues with the templating method as there was with thresholding, rocks match with the template. To overcome this the template can be adjusted, for example the template can be rotated or look at using different ways to calculate the metric.\cite{opencv}
+    
+    \begin{figure}
+    \caption{Templating Search}
+        \includegraphics[width=8cm]{images/sheeps.png}
+        \includegraphics[width=8cm]{images/sheeps1.png}
+        \includegraphics[width=10cm]{images/sheeps2.png}
+        \includegraphics[width=8cm]{images/sheeps3.png}
+        \label{sheeps}
+    \end{figure}
+
+\section{Method Comparison}
+
+\subsection{Other methods discussion}
+
+\section{Conclusion}

@@ -16,9 +16,7 @@
     </span>
                 </a>
             </div>
-
         {% endfor %}
-
     <!--<a href="/uploads" class="button" title="list files on server">List Uploads</a>-->
     <form method=post enctype=multipart/form-data action="/upload">
         <div class="field has-addons">
@@ -46,16 +44,11 @@
       fileName.textContent = fileInput.files[0].name;
     }
   }
-
-
-
     </script>
-
     <a href="/clearuploads" class="button is-danger" title="clears the uploaded files folder.">Clear
         Uploads</a>
 </div>
 <div class="box">
-
     <style>
         #tabs-with-content .tabs:not(:last-child) {
   margin-bottom: 0;
@@ -69,8 +62,6 @@
 #tabs-with-content .tab-content.is-active {
   display: block;
 }
-
-
     </style>
     <h2 class="subtitle">Use one of the following methods and optional arguments listed to find the sheep in
         images.</h2>
@@ -184,11 +175,6 @@
 
   tabs[0].click();
 })();
-
-
     </script>
-
-
 </div>
-
 {% endblock %}

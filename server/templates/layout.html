@@ -11,31 +11,27 @@
 </head>
 <body>
 <section class="hero is-info">
-  <div class="hero-body">
-    <div class="container">
-        <div class="columns">
-    <div class="column is-10">
-      <!-- Image -->
-                          <h1 class="title">
-        Where Are My Sheep
-      </h1>
-      <h2 class="subtitle">
-        {% block subtitle %}{% endblock %}
-      </h2>
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-10">
+                    <!-- Image -->
+                    <h1 class="title">
+                        Where Are My Sheep
+                    </h1>
+                    <h2 class="subtitle">
+                        {% block subtitle %}{% endblock %}
+                    </h2>
+                </div>
+                <div class="column is-2">
+                    <!-- My hero -->
+                    <figure class="level-item image is-128x128">
+                        <img src="/static/James.svg">
+                    </figure>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="column is-2">
-      <!-- My hero --><figure class="level-item image is-128x128">
-  <img src="/static/James.svg">
-</figure>
-    </div>
-  </div>
-
-
-
-
-
-    </div>
-  </div>
 </section>
 
 <section class="section">
@@ -48,8 +44,10 @@
     <div class="content has-text-centered">
         <p>Note: image buttons will prompt downloaded and not display on webpage, as they may be very large.</p>
         <p><strong>Where are my sheep</strong> by Nathan Williams.</p>
-        <p>Website stylesheet <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed<a href="http://opensource.org/licenses/mit-license.php">MIT</a>.</p>
-        <p><strong>JamesTheSheep Logo</strong> used with permission from <a href="https://www.ssago.org/clubs/view/aberssago">MSAGM Aber SSAGOs Logo</a>.</p>
+        <p>Website stylesheet <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code
+            is licensed<a href="http://opensource.org/licenses/mit-license.php">MIT</a>.</p>
+        <p><strong>JamesTheSheep Logo</strong> used with permission from <a
+                href="https://www.ssago.org/clubs/view/aberssago">MSAGM Aber SSAGOs Logo</a>.</p>
     </div>
 </footer>
 {% endblock %}

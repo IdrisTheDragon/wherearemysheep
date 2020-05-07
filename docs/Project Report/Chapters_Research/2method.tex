@@ -1,0 +1,84 @@
+%\addcontentsline{toc}{chapter}{Development Process}
+\chapter{Experiment Methods}
+%TC:ignore
+\begin{comment}
+This section should discuss the overall hypothesis being tested and justify the approach selected in the context of the research area.  Describe the experiment design that has been selected and how measurements and comparisons of results are to be made. 
+
+You should concentrate on the more important aspects of the method. Present an overview before going into detail. As well as describing the methods adopted, discuss other approaches that were considered. You might also discuss areas that you had to revise after some investigation. 
+
+
+\end{comment}
+%TC:endignore
+
+\section{hypothesis}
+
+What is a good method to locate the sheep?
+Compare how accurate they are.
+
+templating better than thresholding.
+
+\subsection{Thresholding}
+
+best colour band or combination of bands to use?
+best threshold value to use?
+look at colour bands together or seperately and combine results? Is it any good of a method what about none white animals?
+
+The first method to be tried is using a threshold value to help us identify the sheep\cite{opencv-t}. Taking one colour band or a merging a combination of bands together we can get a 2d array to work with. 
+    
+    In the example in fig.\ref{thresh} you can see part of the blue band of an image appearing in grayscale on the left, where the brighter pixels of the image correspond to bigger value(255). The central plot shows this in a 3 dimensional graph. You can clearly see where the sheep stands out. 
+    
+    For the thresholding method we can take a value to threshold for example if the values are greater than 200 we set to 255 else to 0. Which produces something like the graph on the right. We can then use a simple search for the values of 255 and look at it's neighbouring high values to locate it's centre and estimate it's size.
+    
+    \begin{figure}
+        \centering
+        \includegraphics[width=5cm]{images/sheep.png}
+        \includegraphics[width=8cm]{images/graph.png}
+        \includegraphics[width=8cm]{images/graph1.png}
+        \caption{Caption}
+        \label{fig:my_label}
+    \end{figure}
+    
+    
+
+\subsection{template matching}
+
+best template shape? size? best colourband to use is it same as thresholding? Is it any good of a method what about none white animals?
+
+
+The second method to be tried out is to use a template, either a sheep that we have previously found or an artificial sheep shape to help match a more general sheep shape, ignoring rotation. See fig.\ref{templates} for examples.
+    
+    \begin{figure}
+        \caption{Template Examples}
+        \includegraphics[width=4cm]{images/template1.png}
+        \includegraphics[width=4cm]{images/template.png}
+        \includegraphics[width=4cm]{images/sheep.png}
+        \label{templates}
+    \end{figure}
+    
+    The template is then moved across the image and we calculate a metric and get a value to help measure how closely the area matches our template, an example result is shown in fig.\ref{sheeps}, you can see hot spots where the pattern matches most. We can then pick out the spots that have the highest value and these are likely our sheep.
+
+\subsection{other approaches considered}
+
+machine learning.
+
+\section{How measurements and comparisons of results are to be made}
+
+ROC graphs.
+
+\section{Support Tools}
+%TC:ignore
+\begin{comment}
+You should also identify any support tools that you used. You should discuss your choice of implementation tools or simulation tools. For any code that you have written, you can talk about languages and related tools. For any simulation and analysis tools, identify the tools and how they are used on the project. 
+
+For the parts of your project that need some engineering (hardware, software, firmware, or a mixture) to support the experiments, include details in your report about your design and implementation. You should discuss with your supervisor whether it is better to include a different top-level section to describe any engineering work.  In this template, Chapter 3 is suggested as a place for that discussion.
+\end{comment}
+%TC:endignore
+
+backend: Python3, opencv, matplotlib, numpy, tifffle.
+programming UI: object oriented python for ease of use in scripts to build graphs etc.
+demo UI: flask simple webserver, django too comlex for this task, bulma make it look nice with not much hasle, (discuus potential to package cross platform with electron). 
+
+design and implementation in Chapter \ref{software}
+
+
+

@@ -14,14 +14,6 @@ class ImageManager{
 
 package server{
     class Server{
-        -serverUI:ServerUI
-        -serverAPI:ServerAPI
-    }
-    class ServerUI{
-
-    }
-    class ServerAPI{
-
     }
 }
 
@@ -48,6 +40,5 @@ Thresholding ..> Finder
 Templating ..> Finder
 Server --* ImageManager
 Server --* Finder
-Server --> ServerAPI
-Server --> ServerUI
+
 @enduml

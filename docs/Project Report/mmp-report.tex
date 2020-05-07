@@ -1,79 +1,24 @@
 \documentclass[11pt,a4paper]{report}
-
-% Aberstwyth MMP Project Report Template for LaTeX
-%
-% Authors: Neil Taylor (nst@aber.ac.uk) and Dr. Hannah Dee (hmd1@aber.ac.uk) 
-%
-% This has been adapted from the Leeds Thesis template and the 
-% Group Project template for Computer Science in Aberystywth University.
-% 
-% All comments and suggestions welcome.
-%
-% Template designed to be used with pdflatex: it may need alteration to
-% run with a different LaTeX engine.
-%
-% Note - this is offered as a starting point for your work. You are not 
-% required to use this template and can choose to create your own document 
-% without it.
-
-% This template is suitable for students with an engineering-style project, 
-% which will be most students in the department. If your project is a research-oriented 
-% project, look at the alternative template.
-
-% To build document on the unix command line, run four commands:
- 
-% pdflatex mmp-report
-% bibtex mmp-report
-% pdflatex mmp-report
-% pdflatex mmp-report
-
-% you will end up with mmp-report.pdf. Before submitting, add your user ID as a prefix, 
-% e.g. abc01-mmp-report.pdf 
 \usepackage{StylesAndReferences/mmp-report}
 
-% the following packages are used for citations - You only need to include one. 
-%
-% Use the cite package if you are using the numeric style (e.g. IEEEannot). 
-% Use the natbib package if you are using the author-date style (e.g. authordate2annot). 
-% Only use one of these and comment out or remove the other one. 
 \usepackage{cite}
-%\usepackage{natbib}
+\usepackage{verbatim}
+\usepackage{tikz}
 
-%%%% Title and Section Colours %%%%
-% Modify these values to change the colours used for title, sections and subsections.
-% Each value is a range of 0-255 in RGB colourspace.
-% Idea courtesy of discussion at 
-% https://www.overleaf.com/learn/latex/Using_colours_in_LaTeX
-% and
-% https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
-% 
-% If you prefer to have black headers, then comment out the following lines
-\definecolor{mmpTitle}{RGB}{10, 85, 145}
-\definecolor{mmpSection}{RGB}{10,85,155}
-\definecolor{mmpSubsection}{RGB}{79,129,189}
+\definecolor{mmpTitle}{RGB}{0,96,15}
+\definecolor{mmpSection}{RGB}{56,142,60}
+\definecolor{mmpSubsection}{RGB}{106,191,105}
 
 \chapterfont{\color{mmpTitle}}  % sets colour of chapters
 \sectionfont{\color{mmpSection}}  % sets colour of sections 
 \subsectionfont{\color{mmpSubsection}} % sets colour subsections
 \subsubsectionfont{\color{mmpSubsection}} % sets colour subsections
 
-%%%% end of Title and Section Colours %%%%
-
-
-%%%% Report Type %%%%
-%% comment/uncomment depending on the type of report you want to generate
-\reporttype{Engineering}
-%\reporttype{Research}
-%%%% end of Report Type %%%%
-
+\reporttype{Agile}
 
 \begin{document}
 
 %TC:ignore
-
-% all of the include directives below refer to tex files
-% so \include{cover} includes cover.tex - to change the content,
-% edit the tex file
 
 \pagenumbering{roman}
 
@@ -89,6 +34,8 @@
 \include{FrontMatter/acknowledgements} % Acknowledgements
 
 \include{FrontMatter/abstract}                 % Abstract
+
+\include{FrontMatter/glossary}  
 
 \pagenumbering{roman}
 \pagestyle{fancy}
@@ -112,11 +59,18 @@
 %TC:endignore
 
 % include the chapters
-\include{Chapters_\showreporttype/chapter1}
-\include{Chapters_\showreporttype/chapter2}
-\include{Chapters_\showreporttype/chapter3}
-\include{Chapters_\showreporttype/chapter4}
-\include{Chapters_\showreporttype/chapter5}
+%\include{Chapters_Agile/1background}
+%\include{Chapters_Agile/2method}
+%\include{Chapters_Agile/3sprint1}
+%\include{Chapters_Agile/3sprint2}
+%\include{Chapters_Agile/3sprint3}
+%\include{Chapters_Agile/4results}
+%\include{Chapters_Agile/5evaluation}
+\include{Chapters_Research/1background}
+\include{Chapters_Research/2method}
+\include{Chapters_Research/3software}
+\include{Chapters_Research/4results}
+\include{Chapters_Research/5evaluation}
 % add any additional chapters here
 
 %TC:ignore
@@ -133,7 +87,7 @@
 \bibliographystyle{StylesAndReferences/IEEEannotU}
 \renewcommand{\bibname}{Annotated Bibliography} 
 
-\bibliography{StylesAndReferences/references} % References file
+\bibliography{StylesAndReferences/mmp} % References file
 
 
 \setemptyheader
