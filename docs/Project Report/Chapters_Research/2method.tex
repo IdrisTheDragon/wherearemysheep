@@ -25,18 +25,18 @@ look at colour bands together or seperately and combine results? Is it any good 
 
 The first method to be tried is using a threshold value to help us identify the sheep\cite{opencv-t}. Taking one colour band or a merging a combination of bands together we can get a 2d array to work with. 
     
-    In the example in fig.\ref{thresh} you can see part of the blue band of an image appearing in grayscale on the left, where the brighter pixels of the image correspond to bigger value(255). The central plot shows this in a 3 dimensional graph. You can clearly see where the sheep stands out. 
+In the example in fig.\ref{thresh} you can see part of the blue band of an image appearing in grayscale on the left, where the brighter pixels of the image correspond to bigger value(255). The central plot shows this in a 3 dimensional graph. You can clearly see where the sheep stands out. 
     
-    For the thresholding method we can take a value to threshold for example if the values are greater than 200 we set to 255 else to 0. Which produces something like the graph on the right. We can then use a simple search for the values of 255 and look at it's neighbouring high values to locate it's centre and estimate it's size.
+For the thresholding method we can take a value to threshold for example if the values are greater than 200 we set to 255 else to 0. Which produces something like the graph on the right. We can then use a simple search for the values of 255 and look at it's neighbouring high values to locate it's centre and estimate it's size.
     
-    \begin{figure}
-        \centering
-        \includegraphics[width=5cm]{images/sheep.png}
-        \includegraphics[width=8cm]{images/graph.png}
-        \includegraphics[width=8cm]{images/graph1.png}
-        \caption{Caption}
-        \label{fig:my_label}
-    \end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=5cm]{images/sheep.png}
+    \includegraphics[width=8cm]{images/graph.png}
+    \includegraphics[width=8cm]{images/graph1.png}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
     
     
 
@@ -59,9 +59,16 @@ The second method to be tried out is to use a template, either a sheep that we h
 
 \subsection{other approaches considered}
 
-machine learning.
+Alongside the two more primitive methods considered, there was consideration into trying a machine learning approach, where a object detection model is trained that can find te sheep for us. 
+For this a large amount of training and testing data would be required and a significant chunk of time is required to do the training. 
+This would be to time consuming for the time scale of this project, as it would likely require training the model a couple of times iterating on the training data set to ensure it is as diverse as possible.
 
 \section{How measurements and comparisons of results are to be made}
+A collection of sample images will be used, where the sheep in them can be manually be counted and located this will be the baseline source of truth, then take and process the set of sample images with each method and compare the number of sheep found. 
+
+The issue with comparing the sheep count alone is there be false positives and false negatives giving a false impression that the method is finding the sheep correctly, so we also need to compare where in the images the sheep are detected match the manually found locations. This will show the true positives and allow us to identify the false positives and false negatives.
+
+From this we can produce ROC graphs which will identify which method is the most accurate.
 
 ROC graphs.
 

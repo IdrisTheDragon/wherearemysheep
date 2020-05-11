@@ -84,7 +84,7 @@ In most cases, the agreed objectives or requirements will be the result of a com
 %TC:endignore
 
 \subsection{Input: images}
-
+This project are images, mostly arieal images of fields with sheep in them, some have been taken with a standard camera 
 \subsubsection{Standard RGB images}
 
 Some of the digital images used in this project are stored as PNG and JPG, these images will usually contain 3 layers of pixels: one for each Red, Green and Blue. Each pixel contains a brightness value for it's colour, normally between 0 and 255 for an 8-bit image. They are stored in a 3 dimensional array, with the first dimension being which layer of the image 0:red, 1:green and 2:blue then the next dimension is the y axis of the image and finally the x axis of the image, an example shape of an image could be: [3,500,400].
@@ -120,16 +120,18 @@ Colour bands of a rededge camera:
 
 \subsubsection{Opening and managing images}
 
-opencv only designed to handle standard RGB images so we need something else to handle the geoTIFF files.
+As OpenCV is only designed to handle standard RGB images, with three colour bands, something else is needed to handle the geoTIFF files from the rededge camera which includes 5 colour bands and geographical data. Time was spent testing various libraries to read the obscure file format. There didn't seem to be a standard go to library for it. 
 
-An initial trial with PyLibTiff \cite{pylibtiff} which is wrapper for the libtiff library to Python using ctypes, resulted in issues with being able to read the geo tags in the files, and saving and transferring the data to the processed files.
+The first library found was PyLibTiff \cite{pylibtiff} which is python wrapper for a libtiff library written in C. Although I could open the images and access the data, the library didn't convert the data into easy to use python types, leaving them as ctypes. The documentation wasn't very clear on how to use the library effectively and searching google didn't produce any useful results. After some tweaking and reading the library's source code a reasonable workflow for the library was created but there were still issues with reading the geographical data from the special geo tags in the files. Even after all this work there was still issues with saving the files and transferring the geographical data to the processed files.
 
-Settled on using tifffle.py \cite{tifffle} as it was much simpler to use and had all the features I needed.
+The second library found was tifffle.py \cite{tifffle}. Which was much simpler to use as it was written in python so used numpy arrays which were easy to manipulate into the correct shapes to use with OpenCV. Opening was very simple and it had support for reading the geographical data but saving still required some manual manipulation.  
 
 \subsection{Processing}
+This project involves manipulating images and using computer vision techniques to find the sheep in the images. The obvious library to assist with this task is OpenCV as it is an industry standard used for all sorts of tasks such as detecting obstacles for autonomous vehicles or doing face detection and recognition. It also has interfaces for many different languages such as C, C++ and Python. This allows flexibility in language to use for the project. 
 
-opencv pros and cons, limitations
-languages? python quick and easy scripting, 
+The decision to use Python 3 was simple as the focus of this project is to determine a technique to use to detect the sheep, so the optimisations that C or C++ might provide are not needed. Python 3 also allows for fast prototyping and has a large selection of libraries to use. 
+
+For potential machine learning applications Python is the language to choose as the powerful Tensorflow library is designed primarily to be used with Python. Tensorflow also has object detection module which could potentially be used in this project.
 
 
 \subsection{Output: Displaying results}
@@ -155,6 +157,8 @@ what is it?
 why am i using it?
 \end{comment}
 %TC:endignore
+
+To manage the time and tasks for the project, it was decided to use an Agile methodology. Scrum team that used kaban boards, backlog and roadmap with daily standups, planning meetings and retrospective meetings. This was a bit much for this project with only one person working on it. So I settled for using a 'lite' version, so instead of all the meetings, I would update the sprint board as I went, and would sit down once a week to end a sprint and review it before starting a new one with tasks for that week. For the different boards I used JIRA a powerful tool that is used in industry by professional Agile teams. The entire system was a breeze to use.
 
 Scrumban lite
 
