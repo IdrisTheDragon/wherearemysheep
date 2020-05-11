@@ -72,30 +72,37 @@ class ImageManager:
         self.locations, self.intermediaryImage = method.findInImage(prepared_image)
         return self.locations, self.intermediaryImage
 
+    def combineToSingleLayer(self,layers=[1.]):
+        prepared_image = None
+        if self.image.shape[0] < len(layers) or self.image.shape[2] < len(
+                layers):  # check number of layers provided is less than or equal to the number of layers in image
+            print("too many layers given")
+            return -1
+        count = 0.
+        for l in layers:
+            count = count + l
+        if 1. < count < 0.9999:
+            print("layers do not sum to one:", layers, "sum:", count)
+            return -1
+        for c, l in enumerate(layers):
+            if self.image.shape[0] > self.image.shape[2]:
+                if prepared_image is None:
+                    prepared_image = l * self.image[:, :, c]
+                else:
+                    prepared_image = prepared_image + l * self.image[:, :, c]
+            else:
+                if prepared_image is None:
+                    prepared_image = l * self.image[c]
+                else:
+                    prepared_image = prepared_image + l * self.image[c]
+        return prepared_image
+
     def combinedSingleLayerFind(self, method: Finder, layers=[1.]):
         prepared_image = None
         if len(self.image.shape) > 2:  # check number of dimensions in image
-            if self.image.shape[0] < len(layers) or self.image.shape[2] < len(
-                    layers):  # check number of layers provided is less than or equal to the number of layers in image
-                print("too many layers given")
+            prepared_image = self.combineToSingleLayer(layers)
+            if prepared_image == -1:
                 return
-            count = 0.
-            for l in layers:
-                count = count + l
-            if 1. < count < 0.9999:
-                print("layers do not sum to one:", layers, "sum:", count)
-                return
-            for c, l in enumerate(layers):
-                if self.image.shape[0] > self.image.shape[2]:
-                    if prepared_image is None:
-                        prepared_image = l * self.image[:, :, c]
-                    else:
-                        prepared_image = prepared_image + l * self.image[:, :, c]
-                else:
-                    if prepared_image is None:
-                        prepared_image = l * self.image[c]
-                    else:
-                        prepared_image = prepared_image + l * self.image[c]
         else:
             prepared_image = self.image
 
@@ -135,7 +142,7 @@ class ImageManager:
         """
         based on coordinates provided outline the sheep in the image
 
-        baseImage - one of {'blank','original'}
+        baseImage - one of {'blank','original','rgb'}
         padding - default 30px padding around a mammal when outlined
 
         returns - numpy array of base image with rectangles highlighting the mammals found mammels.
@@ -149,6 +156,15 @@ class ImageManager:
             outlined = np.zeros(self.intermediaryImage.shape)
         elif baseImage == 'original':
             outlined = self.image
+        elif baseImage == 'rgb':
+            if len(self.image.shape) > 2 and self.image.shape[0] > self.image.shape[2] >= 3:
+                r = self.image[:, :, 0]
+                g = self.image[:, :, 1]
+                b = self.image[:, :, 2]
+                outlined = cv2.merge((r,g,b))
+            else:
+                print('probably already rgb')
+                return
         else:
             print('not a valid baseImage type:', baseImage, '. one of {\'blank\',\'original\'}')
             return

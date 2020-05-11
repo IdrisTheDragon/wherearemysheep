@@ -7,7 +7,7 @@ from flask import Flask, flash, request, redirect, url_for, send_from_directory,
 from werkzeug.utils import secure_filename
 
 from finders import Templating, Thresholding
-from sheepfinder import ImageManager
+from imageManager import ImageManager
 
 UPLOAD_FOLDER = 'images/uploaded'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'tif','TIF'}

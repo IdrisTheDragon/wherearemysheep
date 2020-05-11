@@ -1,6 +1,6 @@
 from finders import Thresholding, Templating
 
-from sheepfinder import ImageManager
+from imageManager import ImageManager
 
 import numpy as np
 import cv2
@@ -99,6 +99,7 @@ def analyser():
     ax:Axes3D = fig.add_subplot(111,projection='3d')
     x = range(image.shape[0])
     y = range(image.shape[1])
+    print(image.shape)
     X, Y = np.meshgrid(x, y)
     ax.plot_surface(X.T,Y.T,image)
     plt.savefig('images/sheep_(839, 3432)_graph.png')
@@ -112,7 +113,7 @@ def analyser():
 
 if __name__ == '__main__':
     #large_file_th()
-    single_channel_small_tiff()
+    #single_channel_small_tiff()
     #extracter()
-    #analyser()
+    analyser()
     #miniexample()

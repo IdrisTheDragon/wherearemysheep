@@ -96,7 +96,7 @@ while run:
     random_key = random.choice(random_chapter.order)
     with open("EDITME.tex", "w") as f:
         f.write(random_chapter.sections[random_key])
-    print('Work on',random_key,'section from the',random_chapter_key, 'chapter now.')
+    print('Work on\n==',random_key,'==\nsection from the',random_chapter_key, 'chapter now.')
     print('Edit and save EDITME.tex and input an option:')
     print('0 : build output and exit')
     print('1 : next section')
@@ -106,6 +106,8 @@ while run:
         run = False
     with open("EDITME.tex", "r") as f:
         random_chapter.sections[random_key] = f.read()
+    for p in chapters.values():
+        p.rebuildOutput()
 
 for p in chapters.values():
     p.rebuildOutput()

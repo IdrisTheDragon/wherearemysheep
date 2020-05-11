@@ -13,9 +13,10 @@ class Thresholding(Finder):
 
     def __init__(self,
                  threshold_value: int = 200,
-                min_pixels_in_sheep: int = 10):
+                min_pixels_in_sheep: int = 10, min_width_height:int=5):
         self.threshold_value = threshold_value
         self.min_pixels_in_sheep = min_pixels_in_sheep
+        self.min_width_height = min_width_height
 
     def findInImage(self, image):
         print('doing the thing')
@@ -31,7 +32,7 @@ class Thresholding(Finder):
         contours, hier = cv2.findContours(threshold_img, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         for cnt in contours:
             (x, y, w, h) = cv2.boundingRect(cnt)
-            if w > 5 and h> 5:
+            if w > self.min_width_height or h> self.min_width_height:
                 locations.append(Location((y, x), size=(h, w)))
         print(locations)
         print(len(locations))
@@ -45,7 +46,12 @@ class Thresholding(Finder):
         #return locations, threshold_img
 
     def __sheep_locations(self, image):
-        """ find the sheep coordinates, based on the none zero pixels groupings"""
+        """
+        find the sheep coordinates, based on the none zero pixels groupings
+
+        essentially cv2.findContours...
+
+        """
         startTime = time.perf_counter()
         coords = []
         rows = image.shape[0]
