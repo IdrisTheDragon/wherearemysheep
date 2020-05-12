@@ -1,7 +1,7 @@
 import cv2  # OpenCV
 
 from finders.finder import Finder
-from location import Location
+from model.location import Location
 
 import numpy as np
 

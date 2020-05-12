@@ -6,7 +6,7 @@ import cv2  # OpenCV
 import numpy as np  # Arrays (1D, 2D, and matrices)
 
 from finders.finder import Finder
-from location import Location
+from model.location import Location
 
 
 class Thresholding(Finder):

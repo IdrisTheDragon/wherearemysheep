@@ -4,7 +4,7 @@ import numpy as np
 import tifffile as tif
 
 from finders import Finder
-from location import Location
+from model.location import Location
 
 
 class ImageManager:

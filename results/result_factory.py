@@ -118,14 +118,6 @@ def getSamples():
         print('dif', sheepav - backav)
 
 
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
     # threshold('images/image-1.tif')
     # threshold('images/image-2.tif')
