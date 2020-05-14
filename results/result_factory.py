@@ -1,3 +1,5 @@
+import os
+
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -117,6 +119,56 @@ def getSamples():
 
         print('dif', sheepav - backav)
 
+def generateTemplates():
+    for templateSize in range(10,50,10):
+        for sheepSize in range(5,int(templateSize/2)+1,5):
+            template = np.full((templateSize, templateSize), 0, dtype=np.uint8)
+            template = cv2.circle(template, (int(templateSize/2), int(templateSize/2)), sheepSize, 255, cv2.FILLED)
+            cv2.imwrite('images/templates/template-{0}-{1}-{2}.png'.format(templateSize, sheepSize, 'circle'), template)
+            template = np.full((templateSize, templateSize), 0, dtype=np.uint8)
+            template = cv2.ellipse(img=template, center=(int(templateSize / 2), int(templateSize / 2)), axes=(int(sheepSize/2), sheepSize),
+                                   angle=90, startAngle=0, endAngle=360, color=255, thickness=cv2.FILLED)
+            cv2.imwrite('images/templates/template-{0}-{1}-{2}.png'.format(templateSize, sheepSize, 'ellipse'), template)
+
+def testTempaltes(filename):
+    sheeps = []
+    s: ImageManager = ImageManager(filename)
+    order = []
+    for file in os.listdir('images/templates'):
+        print(file)
+        template = cv2.imread('images/templates/' + file,cv2.IMREAD_GRAYSCALE)
+        m = Templating(template, 0.50)
+        s.singleLayerFind(m, 0)
+        s.saveIntermidiary('images/template-results/{0}-t-image-1.tif'.format(file))
+        s.outline_mammal(baseImage='rgb')
+        s.saveOutlined('images/template-results/{0}'.format(file))
+        sheeps.append(len(s.locations))
+        order.append(file)
+    for x in sheeps:
+        print(x)
+    for x in order:
+        print(x)
+
+def testExtraTemplates(filename):
+    sheeps = []
+    order = []
+    template = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+    print(template.shape)
+    m = Templating(template, 0.90)
+    for x in range(1,9):
+        s: ImageManager = ImageManager('images/image-{0}.tif'.format(x))
+        s.singleLayerFind(m, 0)
+        s.saveIntermidiary('images/template-results2/{0}.tif'.format(x))
+        s.outline_mammal(baseImage='rgb')
+        s.saveOutlined('images/template-results2/{0}'.format(x))
+        sheeps.append(len(s.locations))
+        order.append(x)
+
+    for x in sheeps:
+        print(x)
+    for x in order:
+        print(x)
+
 
 if __name__ == '__main__':
     # threshold('images/image-1.tif')
@@ -129,5 +181,17 @@ if __name__ == '__main__':
     # threshold('images/image-8.tif')
     # tifToPNG()
     #colourBandComparison()
-    getSamples()
-    colourBandCombiner()
+    #getSamples()
+    #colourBandCombiner()
+    #generateTemplates()
+    #testTempaltes('images/image-1.tif')
+    #testTempaltes('images/image-2.tif')
+    #testTempaltes('images/image-3.tif')
+    #testTempaltes('images/image-4.tif')
+    #testTempaltes('images/image-5.tif')
+    #testTempaltes('images/image-6.tif')
+    #testTempaltes('images/image-7.tif')
+    testTempaltes('images/image-8.tif')
+    #testExtraTemplates('images/image-4.png')
+    #testExtraTemplates('images/sheep_(839, 3432).tif')
+    #testExtraTemplates('images/image-4-crop.png')

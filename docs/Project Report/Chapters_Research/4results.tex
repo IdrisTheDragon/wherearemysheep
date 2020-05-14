@@ -10,32 +10,624 @@ It is more likely that things were more complex than you first thought. In parti
 If you had multiple experiments to run, it may be sensible to discuss each experiment in separate sections.
 \end{comment}
 %TC:endignore
+
+
+\section{Colour bands}
+
+\begin{figure}[H]
+    \centering
+
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/results/image-4.png}
+    \caption{Source image}
+
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/results/colour-compare/image-4-red.png}
+    \caption{red colour band}
+
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/results/colour-compare/image-4-green.png}
+    \caption{green colour band}
+
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/results/colour-compare/image-4-blue.png}
+    \caption{blue colour band}
+
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/results/colour-compare/image-4-rededge.png}
+    \caption{rededge colour band}
+
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/results/colour-compare/image-4-nearir.png}
+    \caption{Near IR colour band}
+
+\end{subfigure}
+    \caption{Colour bands}
+    \label{fig:colour-bands}
+\end{figure}
+
+In figure \ref{fig:colour-bands} you can see that there are differences between the different colour bands on how well the sheep stand out. From looking at the images a guess can be made that red is probably the best band but we can confirm it. Using code \ref{Appendix:code:Splitting} to split an image into it's seperate colour bands. Then \ref{Appendix:code:averages} takes samples from the image. Which produces these results:
+
+\begin{itemize}
+    \item red
+    
+background: 32.81967213114754
+
+sheep: 228.42857142857142
+
+difference: 195.60889929742387
+
+\item blue
+
+background: 52.24590163934426
+
+sheep: 240.78571428571428
+
+difference: 188.53981264637002
+
+\item rededge
+
+background: 181.19672131147541
+
+sheep: 243.85714285714286
+
+difference: 62.66042154566745
+
+\item near IR
+
+background: 201.65573770491804
+
+sheep: 237.5
+
+difference: 35.84426229508196
+
+\end{itemize}
+
+From this we can see that the biggest difference between sheep and background is in the red colour band. With rededge and near IR preforming significantly worse.
+
+But comparing the sheep values between red and rededge they are similar, but there is a big change in the background as vegetation has a colour spike in the rededge range which is why it is used when analysing vegetation. Using this change to our advantage it might be possible to emphasis the difference between sheep and none sheep by combining the layers together selectively.
+
+For example using a weighting of [0.2,0.2,0.2,-0.2,-0.2] respectively for each band we get:
+
+background: 34.59016393442623
+
+sheep: 232.57142857142858
+
+difference: 197.98126463700237
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{images/results/colour-compare/image-4-combined.png}
+    \caption{Combined bands at weightings of [0.2,0.2,0.2,-0.2,-0.2]}
+    \label{fig:colour-bands-combined}
+\end{figure}
+
+Which gives us a bigger difference between sheep and background. Although using the rededge and near-IR  won't help us distinguish between rocks and sheep as the rededge change only happens for vegetation. For the rest of this project, the red band will continue to be used though for analysis as it will transfer better to images that are only RGB from a standard camera.
+
+\clearpage
 \section{Thresholding Results}
 
-Manual adjustments of the threshold value is required on an image by image basis to minimise false positives and false negatives. The issue with this method though is the that it not only picks up the sheep it also picks up anything bright some examples in fig.\ref{threshfailures}.
+Manual adjustments of the threshold value is required on an image by image basis to minimise false positives and false negatives. The issue with this method though is the that it not only picks up the sheep it also picks up anything bright some examples in fig.\ref{fig:threshfailures}.
     
     \begin{figure}
         \centering
         \includegraphics[width=7cm]{images/threshfail1.png}
         \includegraphics[width=7cm]{images/threshfail2.png}
         \includegraphics[width=6cm]{images/threshfail3.png}
-        \caption{Caption}
-        \label{fig:my_label}
+        \caption{Threshold Failures}
+        \label{fig:threshfailures}
     \end{figure}
+    
+\subsection{What is the best threshold value?}
+
+Using a set of thresholds and a set of images we can produce a set of results to compare.
+
+\begin{figure}[H]
+    \centering
+
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\textwidth]{images/results/image-1.png}
+    \caption{Source image}
+
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+    \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-1.png}
+    \caption{threshold results}
+
+\end{subfigure}
+\begin{subfigure}{.9\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/results/theshold-graph/image-1.png}
+    \caption{Graph Showing results for threshold on image-1}
+\end{subfigure}%
+
+    \caption{Threshold Results Image-1}
+    \label{fig:Threshold-Results-Image-1}
+\end{figure}
+
+For the first image seen in figure \ref{fig:Threshold-Results-Image-1}, which is a fairly simple image, with the sheep in the open on a relatively plain background, the lower threshold values are completely useless, producing far too many false positives to be useful. The value of 220 gives a perfect score finding all 11 sheep in the image, with no false positives. 240 and above some sheep are missed, so using a higher value may be detrimental if a sheep isn't perfectly lit. 
+
+\begin{figure}[H]
+    \centering
+
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\textwidth]{images/results/image-2.png}
+    \caption{Source image}
+
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+    \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-2.png}
+    \caption{threshold results}
+
+\end{subfigure}
+\begin{subfigure}{.9\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/results/theshold-graph/image-2.png}
+    \caption{Graph Showing results for threshold on image-2}
+\end{subfigure}%
+
+    \caption{Threshold Results Image-2}
+    \label{fig:Threshold-Results-Image-2}
+\end{figure}
+
+image-2 is a little trickier as seen in figure \ref{fig:Threshold-Results-Image-2}, with a building and the sheep obscured by shadow. 140 is the best threshold giving the most true positives but least false positives. Beyond this the true positives decrease but so do the false positives. This is not very useful a there are still false positives. If using the ideal true positive for image-1 of 220 for image-2, it would only find one of our sheep.
+
+\begin{figure}[H]
+    \centering
+
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\textwidth]{images/results/image-3.png}
+    \caption{Source image}
+
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+    \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-3.png}
+    \caption{threshold results}
+
+\end{subfigure}
+\begin{subfigure}{.9\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/results/theshold-graph/image-3.png}
+    \caption{Graph Showing results for threshold on image-3}
+\end{subfigure}%
+
+    \caption{Threshold Results Image-3}
+    \label{fig:Threshold-Results-Image-3}
+\end{figure}
+
+image-3 as seen in figure \ref{fig:Threshold-Results-Image-3} has a bright building and a path. In this image,
+120 is the best threshold with the most true positives and least false positives. Beyond this a number of sheep are lost and the false positive results reduces but never fully diminishes. Even at the 120 threshold there are still 177 false positives which makes it next to useless in finding sheep.
+
+\begin{figure}[H]
+    \centering
+
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\textwidth]{images/results/image-5.png}
+    \caption{Source image}
+
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+    \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-5.png}
+    \caption{threshold results}
+
+\end{subfigure}
+\begin{subfigure}{.9\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/results/theshold-graph/image-5.png}
+    \caption{Graph Showing results for threshold on image-5}
+\end{subfigure}%
+
+    \caption{Threshold Results Image-5}
+    \label{fig:Threshold-Results-Image-5}
+\end{figure}
+
+image-4 is not used for the thresholding as it wouldn't show mush as it so small.
+
+image-5 as seen in figure \ref{fig:Threshold-Results-Image-5}, does not have any sheep in it, but contains more than just plain grass. As the threshold value is increased, the number of false positives diminishes. The last few remaining false positives at the higher threshold values are highlighting rocks, that are big enough to count as sheep.
+
+\begin{figure}[H]
+    \centering
+
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\textwidth]{images/results/image-6.png}
+    \caption{Source image}
+
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+    \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-6.png}
+    \caption{threshold results}
+
+\end{subfigure}
+\begin{subfigure}{.9\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/results/theshold-graph/image-6.png}
+    \caption{Graph Showing results for threshold on image-6}
+\end{subfigure}%
+
+    \caption{Threshold Results Image-6}
+    \label{fig:Threshold-Results-Image-6}
+\end{figure}
+
+image-6 as seen in figure \ref{fig:Threshold-Results-Image-6}, is similar to image-1, but has a few larger white rocks. 220 and 200 threshold gives best results because most true positives and least false positives. 140 and 160 might also be considered use able in this scenario. Again like image-1 the 240 threshold is too bright for our off white sheep.
+
+\begin{figure}[H]
+    \centering
+
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\textwidth]{images/results/image-7.png}
+    \caption{Source image}
+
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+    \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-7.png}
+    \caption{threshold results}
+
+\end{subfigure}
+\begin{subfigure}{.9\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/results/theshold-graph/image-7.png}
+    \caption{Graph Showing results for threshold on image-7}
+\end{subfigure}%
+
+    \caption{Threshold Results Image-7}
+    \label{fig:Threshold-Results-Image-7}
+\end{figure}
+
+image-7 as seen in figure \ref{fig:Threshold-Results-Image-7}, has 5 sheep but although the image is an extract from a larger image as the other images, The drone in this case seems to have gained altitude so the sheep are less clear as they are smaller. 200 threshold has the most true positives and least false positives in this image, but still has a high number of false positives. That continues to diminishes at the threshold of 240, where we also start loosing sheep. This is probably as the sheep are smaller in this image, so the central pixels of the sheep are darker as the darker green background is picked up form the surrounding area.
+
+\begin{figure}[H]
+    \centering
+
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\textwidth]{images/results/image-8.png}
+    \caption{Source image}
+
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+\centering
+    \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-8.png}
+    \caption{threshold results}
+
+\end{subfigure}
+\begin{subfigure}{.9\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/results/theshold-graph/image-8.png}
+    \caption{Graph Showing results for threshold on image-8}
+\end{subfigure}%
+
+    \caption{Threshold Results Image-8}
+    \label{fig:Threshold-Results-Image-8}
+\end{figure}
+
+image-8 as seen in figure \ref{fig:Threshold-Results-Image-8}, 3 sheep on green background with a red bush and a couple of other background features. The 240 threshold gives best results, most true positives and least false positive.
+
+
+\begin{figure}[H]
+    \centering
+
+    \includegraphics[width=\textwidth]{images/results/theshold-graph/combined.png}
+    \caption{Graph Showing results for threshold of all images combined}
+    \label{fig:Threshold-Results-combined}
+\end{figure}
+
+In figure \ref{fig:Threshold-Results-combined}, the results from all the images have been summed up. The best threshold to use in most cases would be any threshold of 200 or above as this gives the best results with the least false positives. But there is still a far too many false positives when looking at all the sample images used. All of the results would still need a manual review as with two of the images the true positive count goes down. The images this occurs for is one where there is shadows and buildings which could confuse the algorithm. However, there is adequate data here to show that in more 'plain' - both in shading and natural features environments this method would work well. But instroduing complex elements such as paths or buildings or white rocks then this method falls short of useable.
+
+
 
 
 \section{Templating Results}
 
-But there is have similar issues with the templating method as there was with thresholding, rocks match with the template. To overcome this the template can be adjusted, for example the template can be rotated or look at using different ways to calculate the metric.\cite{opencv}
+
+\begin{figure}[H]
+    \centering
+
+\begin{subfigure}{.25\textwidth}
+    \centering
+    \includegraphics{images/results/templates/template-10-5-circle.png}
+    \caption{10-5-circle}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-20-5-circle.png}
+    \caption{20-5-circle}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-30-5-circle.png}
+    \caption{30-5-circle}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-40-5-circle.png}
+    \caption{40-5-circle}
+\end{subfigure}
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-40-20-ellipse.png}
+    \caption{40-20-ellipse}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-20-10-circle.png}
+    \caption{20-10-circle}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-30-10-circle.png}
+    \caption{30-10-circle}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-40-10-circle.png}
+    \caption{40-10-circle}
+\end{subfigure}
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-40-15-ellipse.png}
+    \caption{40-15-ellipse}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-30-15-ellipse.png}
+    \caption{30-15-ellipse}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-30-15-circle.png}
+    \caption{30-15-circle}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-40-15-circle.png}
+    \caption{40-15-circle}
+\end{subfigure}
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-40-10-ellipse.png}
+    \caption{40-10-ellipse}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-30-10-ellipse.png}
+    \caption{30-10-ellipse}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-20-10-ellipse.png}
+    \caption{20-10-ellipse}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-40-20-circle.png}
+    \caption{40-20-circle}
+\end{subfigure}
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-40-5-ellipse.png}
+    \caption{40-5-ellipse}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-30-5-ellipse.png}
+    \caption{30-5-ellipse}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-20-5-ellipse.png}
+    \caption{20-5-ellipse}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+\centering
+    \includegraphics{images/results/templates/template-10-5-ellipse.png}
+    \caption{10-5-ellipse}
+\end{subfigure}
+
+    \caption{Artificial Templates }
+    \medskip
+    \small
+    width and height(pixels)-shape(pixels)-shapeName \\ For ellipse shape width is twice height.
+    \label{fig:Artifical-templates}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
     
-    \begin{figure}
-    \caption{Templating Search}
-        \includegraphics[width=8cm]{images/sheeps.png}
-        \includegraphics[width=8cm]{images/sheeps1.png}
-        \includegraphics[width=10cm]{images/sheeps2.png}
-        \includegraphics[width=8cm]{images/sheeps3.png}
-        \label{sheeps}
-    \end{figure}
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/image-1.png}
+        \caption{Source image}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/template-value/image-1.png}
+        \caption{template results}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+    \centering
+        \includegraphics[width=.9\textwidth]{images/results/templating/image-1.png}
+        \caption{Graph showing results for templates on image-1}
+    \end{subfigure}
+    
+    \caption{Templating Results Image-1}
+    \label{fig:Templating-Results-Image-1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/image-2.png}
+        \caption{Source image}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/template-value/image-2.png}
+        \caption{template results}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+    \centering
+        \includegraphics[width=.9\textwidth]{images/results/templating/image-2.png}
+        \caption{Graph showing results for templates on image-2}
+    \end{subfigure}
+    
+    \caption{Templating Results Image-2}
+    \label{fig:Templating-Results-Image-2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/image-3.png}
+        \caption{Source image}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/template-value/image-3.png}
+        \caption{template results}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+    \centering
+        \includegraphics[width=.9\textwidth]{images/results/templating/image-3.png}
+        \caption{Graph showing results for templates on image-3}
+    \end{subfigure}
+    
+    \caption{Templating Results Image-3}
+    \label{fig:Templating-Results-Image-3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/image-5.png}
+        \caption{Source image}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/template-value/image-5.png}
+        \caption{template results}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+    \centering
+        \includegraphics[width=.9\textwidth]{images/results/templating/image-5.png}
+        \caption{Graph showing results for templates on image-5}
+    \end{subfigure}
+    
+    \caption{Templating Results Image-5}
+    \label{fig:Templating-Results-Image-5}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/image-6.png}
+        \caption{Source image}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/template-value/image-6.png}
+        \caption{template results}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+    \centering
+        \includegraphics[width=.9\textwidth]{images/results/templating/image-6.png}
+        \caption{Graph showing results for templates on image-6}
+    \end{subfigure}
+    
+    \caption{Templating Results Image-6}
+    \label{fig:Templating-Results-Image-6}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/image-7.png}
+        \caption{Source image}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/template-value/image-7.png}
+        \caption{template results}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+    \centering
+        \includegraphics[width=.9\textwidth]{images/results/templating/image-7.png}
+        \caption{Graph showing results for templates on image-7}
+    \end{subfigure}
+    
+    \caption{Templating Results Image-7}
+    \label{fig:Templating-Results-Image-7}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/image-8.png}
+        \caption{Source image}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/results/template-value/image-8.png}
+        \caption{template results}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+    \centering
+        \includegraphics[width=.9\textwidth]{images/results/templating/iamge-8.png}
+        \caption{Graph showing results for templates on image-8}
+    \end{subfigure}
+    
+    \caption{Templating Results Image-8}
+    \label{fig:Templating-Results-Image-8}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/results/templating/template-combined.png}
+    \caption{Graph showing results for templates combined}
+    \label{fig:Templating-Results-combined}
+\end{figure}
+
+But there is have similar issues with the templating method as there was with thresholding, rocks match with the template. To overcome this the template can be adjusted, for example the template can be rotated or look at using different ways to calculate the metric.\cite{opencv-python}
+
+
+    
+    
 
 \section{Method Comparison}
 

@@ -115,5 +115,6 @@ if __name__ == '__main__':
     #large_file_th()
     #single_channel_small_tiff()
     #extracter()
-    analyser()
+    #analyser()
     #miniexample()
+    large_file()

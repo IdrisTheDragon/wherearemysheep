@@ -15,6 +15,11 @@ class Templating(Finder):
     def findInImage(self,image):
         if image is None or len(image.shape) is not 2:
             print('error with image')
+            return
+
+        if len(self.template.shape) is not 2:
+            print('error with template')
+            return
         image = cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
         m = np.float32([(1,0,self.template.shape[0]/2),(0,1,self.template.shape[1]/2)])
         d = cv2.matchTemplate(image,self.template,cv2.TM_CCORR_NORMED)
