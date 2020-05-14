@@ -17,7 +17,7 @@
 Initial brief:
 
 \begin{quote}
-Research projects in collaboration with biologists and farmers look at automatically detecting sheep from aerial imagery, in particular multi-spectral images. This can also applied to other animals such as deer. This project looks into using these images to detect and count sheep. A variety of methods can be explored. 
+Research projects in collaboration with biologists and farmers to look at automatically detecting sheep from aerial imagery, in particular multi-spectral images. This can also be applied to other animals such as deer. This project looks into using these images to detect and count sheep. A variety of methods can be explored. 
 \end{quote}
 
 
@@ -27,9 +27,7 @@ Research projects in collaboration with biologists and farmers look at automatic
 What was your background preparation for the project? What similar systems or research techniques did you assess? What was your motivation and interest in this project? 
 \end{comment}
 %TC:endignore
-The aim of this project is to investigate ways to locate and count the sheep in a set of aerial images of fields, some of which were taken on a red-edge camera to provide multi spectral images. At the start we will mainly look at white sheep, but sheep are not just white so we must investigate ways of identifying black and brown sheep also. I will also discuss how the techniques could be used to count and track other mammals such as deer. The purpose of identifying the animals from the aerial images is that it allows biologists to observe them without disturbing them such as attaching GPS trackers to them individually. The images were originally used by biologists to identify and track the flora but using the same data to track fauna would also advantageous.
-
-%The aim of this project is to investigate ways to locate and count the sheep in a set of aerial images of fields, some of which were taken on a red-edge camera\cite{rededge} to provide multi spectral images. At first the aim is to look solely at white sheep, but sheep are not just white so we must investigate ways of identifying black and brown sheep also. 
+The aim of this project is to investigate ways to locate and count the sheep in a set of aerial images of fields, some of which were taken on a red-edge camera to provide multi spectral images. At the start the project will mainly look at white sheep, but sheep are not just white so we must investigate ways of identifying black and brown sheep also.
     
 This will lead to a discussion on how the techniques could be used to count and track other mammals such as deer. The purpose of identifying the animals from the aerial images is that it allows biologists to observe them without disturbing them such as attaching GPS trackers to them individually. The images were originally used by biologists to identify and track the flora but using the same data to track fauna would also advantageous.
 
@@ -48,7 +46,7 @@ This will lead to a discussion on how the techniques could be used to count and 
     \label{fig:manual}
 \end{figure}
 
-Locating and counting the sheep can obviously be done manually as seen in figure \ref{fig:manual} but this would be tedious and time consuming as the images can be very large and the sheep few and far between with each sheep only covering around 20 pixels in size. As the images are at a resolution of approximately 8 cm per pixel if the camera is  120m above the landscape.\cite{rededge}
+Locating and counting the sheep can be carried out manually as seen in figure \ref{fig:manual} but this would be tedious and time consuming as the images can be very large and the sheep few and far between with each sheep only covering around 20 pixels in size. As the images are at a resolution of approximately 8 cm per pixel if the camera is  120m above the landscape.\cite{rededge}
 
 this is the first method, I found some existing research about it....
 This is the good things about the first method...
@@ -60,16 +58,11 @@ This is the good things about the second method...
 This is the bad things about the second method....
 on the whole the second method would be useful in this scenario..
 
-this is the third method i found some existing research on it...
-This is the good things about the third method...
-This is the bad things about the third  method....
-on the whole the third method would be useful in this scenario..
-
 This method would be the most superior method to use in comparison to the other methods because....I hope to investigate applying this to the project and proving/disproving my ideas....
 
-\subsection{rededge and near IR}
+\subsection{Rededge And Near IR}
 
-red edge used for vegetation detection as there is a region of rapid change in reflectance just outside the red range of the electromagnetic spectrum.
+Red edge is used for vegetation detection as there is a region of rapid change in reflectance just outside the red range of the Electromagnetic Spectrum.
 
 
 \section{Analysis}
@@ -84,17 +77,17 @@ In most cases, the agreed objectives or requirements will be the result of a com
 %TC:endignore
 
 \subsection{Input: images}
-This project are images, mostly arieal images of fields with sheep in them, some have been taken with a standard camera 
+In this project lots of images are used, mostly aerial images of fields with sheep in them, some of which have been taken with a standard camera. While others on a specialist cameras.
 \subsubsection{Standard RGB images}
 
-Some of the digital images used in this project are stored as PNG and JPG, these images will usually contain 3 layers of pixels: one for each Red, Green and Blue. Each pixel contains a brightness value for it's colour, normally between 0 and 255 for an 8-bit image. They are stored in a 3 dimensional array, with the first dimension being which layer of the image 0:red, 1:green and 2:blue then the next dimension is the y axis of the image and finally the x axis of the image, an example shape of an image could be: [3,500,400].
+Some of the digital images used in this project are stored as PNG and JPG, these images will usually contain 3 layers of pixels: one for each Red, Green and Blue. Each pixel contains a brightness value for it's colour, normally between 0 and 255 for an 8-bit image. They are stored in a 3 dimensional array, with the first dimension being each layer of the image 0:red, 1:green and 2:blue then the next dimension is the y axis of the image and finally the x axis of the image, an example shape of an image could be: [3,500,400].
 
-\subsubsection{Red-edge Camera images}
+\subsubsection{RedEdge Camera images}
     
-The other primary format used in this project are stored as geoTIFF files. These contain a set of metadata, such as a scale and GPS coordinates of the image, and a 2 dimensional array for the y and x axis of the image. In the array there is a set of colour samples, the number of samples can vary. In this case the project is using images from a RedEdge camera so we get 5 samples at each location. Each sample contains 12-bits of data, the first 3 samples being the standard blue, green, red, the remaining two are red edge and near-IR. This gives us extra data to work with.
+The other primary format used in this project are stored as geoTIFF files. These contain a set of metadata, such as a scale and GPS coordinates of the image, and a 2 dimensional array for the x and y axis of the image. In the array there is a set of colour samples, the number of samples can vary. In this case the project is using images from a RedEdge camera so we get 5 samples at each location. Each sample contains 12-bits of data, the first 3 samples being the standard blue, green, red, the remaining two are red edge and near-IR. This gives us extra data to work with.
 
 
-Colour bands of a rededge camera:
+Colour bands of a RedEdge camera:
 
 \begin{itemize}
     \item Blue 
@@ -109,34 +102,41 @@ Colour bands of a rededge camera:
     
     668 nm center, 10 nm bandwidth
     
-    \item rededge
+    \item Red edge
     
     717 nm center, 10 nm bandwidth
     
-    \item near-IR
+    \item Near-IR
     
     840 nm center, 40 nm bandwidth\cite{rededge}
 \end{itemize}
 
 \subsubsection{Opening and managing images}
 
-As OpenCV is only designed to handle standard RGB images, with three colour bands, something else is needed to handle the geoTIFF files from the rededge camera which includes 5 colour bands and geographical data. Time was spent testing various libraries to read the obscure file format. There didn't seem to be a standard go to library for it. 
+As OpenCV is only designed to handle standard RGB images, with three colour bands, something else is needed to handle the geoTIFF files from the red edge camera which includes 5 colour bands and geographical data. Time was spent testing various libraries to read the obscure file format. There did not seem to be a standard go to library for it. 
 
-The first library found was PyLibTiff \cite{pylibtiff} which is python wrapper for a libtiff library written in C. Although I could open the images and access the data, the library didn't convert the data into easy to use python types, leaving them as ctypes. The documentation wasn't very clear on how to use the library effectively and searching google didn't produce any useful results. After some tweaking and reading the library's source code a reasonable workflow for the library was created but there were still issues with reading the geographical data from the special geo tags in the files. Even after all this work there was still issues with saving the files and transferring the geographical data to the processed files.
+The first library found was PyLibTiff \cite{pylibtiff} which is a python wrapper for a libtiff library written in C. Although I could open the images and access the data, the library did not convert the data into easy to use python types, leaving them as ctypes. The documentation was not very clear on how to use the library effectively and searching google did not produce any useful results. After some tweaking and reading the library's source code a reasonable workflow for the library was created but there were still issues with reading the geographical data from the special geo tags in the files. Even after all this work there was still issues with saving the files and transferring the geographical data to the processed files.
 
 The second library found was tifffle.py \cite{tifffle}. Which was much simpler to use as it was written in python so used numpy arrays which were easy to manipulate into the correct shapes to use with OpenCV. Opening was very simple and it had support for reading the geographical data but saving still required some manual manipulation.  
 
 \subsection{Processing}
-This project involves manipulating images and using computer vision techniques to find the sheep in the images. The obvious library to assist with this task is OpenCV as it is an industry standard used for all sorts of tasks such as detecting obstacles for autonomous vehicles or doing face detection and recognition. It also has interfaces for many different languages such as C, C++ and Python. This allows flexibility in language to use for the project. 
+This project involves manipulating images and using computer vision techniques to find the sheep in the images. The obvious library to assist with this task is OpenCV as it is an industry standard used for all sorts of tasks such as detecting obstacles for autonomous vehicles or doing face detection and recognition. It also has interfaces for many different languages such as C, C++ and Python. This allows flexibility in languages to use for the project. 
 
 The decision to use Python 3 was simple as the focus of this project is to determine a technique to use to detect the sheep, so the optimisations that C or C++ might provide are not needed. Python 3 also allows for fast prototyping and has a large selection of libraries to use. 
 
-For potential machine learning applications Python is the language to choose as the powerful Tensorflow library is designed primarily to be used with Python. Tensorflow also has object detection module which could potentially be used in this project.
+For potential machine learning applications Python is the most suitable language to choose as the powerful Tensorflow library is designed primarily to be used with Python. Tensorflow also has object detection module which could potentially be used in this project.
 
 
 \subsection{Output: Displaying results}
 
-powerful graphing with matplotlib flexible.
+\begin{itemize}
+    \item Powerful graphing with matplotlib\cite{matplotlib} a Python library, it is flexible can also do 3D plots. 
+    \item Google sheets quick and dirty data entry. 
+    \item Latex to generate collages of processed images. 
+    \item Terminal output, methods return data, class variables have acccesible data.
+    \item Squares over image to highlight the sheep.
+\end{itemize}
+
 
 
 
@@ -155,10 +155,6 @@ For the research-oriented projects, there needs to be a suitable process for the
 \begin{comment}
 what is it?
 why am i using it?
-\end{comment}
-%TC:endignore
-
-To manage the time and tasks for the project, it was decided to use an Agile methodology. Scrum team that used kaban boards, backlog and roadmap with daily standups, planning meetings and retrospective meetings. This was a bit much for this project with only one person working on it. So I settled for using a 'lite' version, so instead of all the meetings, I would update the sprint board as I went, and would sit down once a week to end a sprint and review it before starting a new one with tasks for that week. For the different boards I used JIRA a powerful tool that is used in industry by professional Agile teams. The entire system was a breeze to use.
 
 Scrumban lite
 
@@ -166,5 +162,12 @@ jira board
 roadmap
 backlog
 weekly sprints
+
+\end{comment}
+%TC:endignore
+
+To manage the time and tasks for the project, it was decided to use an Agile methodology. Scrum teams use kaban boards, backlog and roadmap with daily standups, planning meetings and retrospective meetings. This was a bit much for this project with only one person working on it. So I settled for using a 'lite' version, so instead of all the meetings, I would update the sprint board as I went, and would sit down once a week to end a sprint and review it before starting a new one with tasks for that week. For the different boards I used JIRA, a powerful tool that is used in industry by professional Agile teams. The entire system was a very efficent to setup and use.
+
+
 
 

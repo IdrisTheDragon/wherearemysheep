@@ -3,9 +3,21 @@
 %TC:ignore
 
 \section*{\centering Abstract}
-
+\begin{comment}
 Include an abstract for your project. This should be approximately 300 words. 
 
 The abstract is an overview of the work you have done. Highlight the purpose of the work and the key outcomes of the work.
+\end{comment}
+
+The purpose of this report is to look into locating sheep in images from aerial photography automatically, to help researchers and farmers count the sheep. The report primarily concentrates on white sheep. The code behind this report was developed to be flexible to enable its use with different methods of finding the sheep and loading images of different formats.
+
+Two methods were looked into in this report. Firstly, using a threshold value to locate white sheep as the pixels the sheep are in are brighter than the background. The second method uses a template of a sheep to match against the image to find where in the image the best match is. 
+
+However both methods are fairly primitive and would not be suitable for locating sheep. There were too many false positives where rocks were identified as sheep, even after a significant amount of work to optimise both methods. An option for future research could be using a machine learning model to do the object detection similar to systems that are used in used in cars.
+
+The code developed for this report can be found on \url{github.com/IdrisTheDragon/wherearemysheep} \cite{wherearemysheep}
+
+
+
 
 %TC:endignore

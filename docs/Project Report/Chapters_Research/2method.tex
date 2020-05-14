@@ -11,14 +11,15 @@ You should concentrate on the more important aspects of the method. Present an o
 %TC:endignore
 
 \section{Hypothesis}
-
+\begin{comment}
 What is a good method to locate the sheep?
 Compare how accurate they are.
 
 templating better than thresholding.
+\end{comment}
 
 \subsection{Best colour band}
-When processing images it is difficult to do it on multiple colour bands at the same time, so to determine the best colour band, a simple sample image can be used. In this case the project will use the image in figure \ref{fig:image-4} to help. From this average values can be calculated for each band from pixels with the sheep and pixels without the sheep. A difference can then be calculated to give a measure of how much the sheep stands out form the background.
+When processing images it is difficult to do it on multiple colour bands at the same time, so to determine the best colour band, a simple sample image was used for testing. In this case the project will use the image in figure \ref{fig:image-4} to help. From this image average values can be calculated for each colour band from pixels with the sheep and pixels without the sheep. The difference can then be calculated to give a measure of how much the sheep stands out form the background.
 
 There is also the option to combine colour bands, that may help emphasis the difference between the foreground and backgrounds. The project will only look at this briefly.
 
@@ -26,64 +27,93 @@ Taking one colour band or merging a combination of bands together gives us a 2d 
 
 \subsection{Thresholding method}
 
-The first method to be tried is using a threshold value to help us identify the sheep\cite{opencv-t}. 
+The first method to be tried is using a threshold value to help us identify the sheep\cite{opencv-python}. 
     
-In the example in fig.\ref{thresh} you can see part of the blue band of an image appearing in grayscale on the left, where the brighter pixels of the image correspond to bigger value(255). The central plot shows this in a 3 dimensional graph. You can clearly see where the sheep stands out. 
+In the example in Fig. \ref{fig:thresh} you can see part of the blue band of an image appearing in greyscale on the left, where the brighter pixels of the image correspond to bigger values (255). The lower plot shows this in a 3 dimensional graph. It can clearly be seen where the sheep is as it stands out due to the higher values. 
     
-The thresholding method takes a value to threshold for example if the values are greater than 200, it gets set to 255 else to 0. Which produces something like the graph on the right. Then using a simple search for the values of 255 and look at it's neighbouring high values to locate it's centre and estimate it's size.
+The thresholding method takes a value to threshold for example if the values are greater than 200, it gets set to 255 else to 0. Which produces something like the graph on the right. Then using a simple search for the values of 255 and look at its neighbouring high values to locate its centre and estimate its size so an estimate can be made whether it is a sheep rather than a rock.
     
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \includegraphics[width=5cm]{images/sheep.png}
-    \includegraphics[width=5cm]{images/graph.png}
-    \includegraphics[width=5cm]{images/graph1.png}
-    \caption{Thresholding steps}
+    
+    \begin{subfigure}{.3\textwidth}
+        \centering
+        \includegraphics[width=.9\textwidth]{images/sheep.png}
+        \caption{original image}
+    \end{subfigure}%
+    \begin{subfigure}{.3\textwidth}
+        \centering
+        \includegraphics[width=.9\textwidth]{images/graph.png}
+        \caption{Pixel values visualised}
+    \end{subfigure}%
+    \begin{subfigure}{.3\textwidth}
+        \centering
+        \includegraphics[width=.9\textwidth]{images/graph1.png}
+        \caption{Threshold applied}
+    \end{subfigure}
+    \caption{Threshold example}
     \label{fig:thresh}
 \end{figure}
 
 \subsubsection{What is the best threshold value?}
 
-A set of images that range in complexity as seen in Appendix \ref{appendix:Images} can be used to determine the best threshold value to use, by counting the true positives, false positives and false negatives for a range of threshold values. This will give us an idea of what the best threshold value to use is.
+A set of images that range in complexity as seen in Appendix \ref{appendix:Images} can be used to determine the best threshold value to use, by counting the true positives, false positives and false negatives for a range of threshold values, between 0 and 255 with a jump of 20 that should be small enough to be detailed but large enough not to produce an unreasonable large number of results. This will give us an idea of what the best threshold value to use is. A manual search will be done to verify the true positives form this the other metrics can be calculated.
 
-\subsection{template matching}
+\subsection{Template Matching}
 
-The second method to be tried out is to use a template, either a sheep that we have previously found or an artificial sheep shape to help match a more general sheep shape, ignoring rotation. See fig.\ref{templates} for examples.
+The second method to be tried out is to use a template, either a sheep that we have previously found or an artificial sheep shape to help match a more general sheep shape, ignoring rotation. See Fig .\ref{templates} for examples.
     
-    \begin{figure}
+    \begin{figure}[H]
+        \includegraphics[width=.3\textwidth]{images/template1.png}
+        \includegraphics[width=.3\textwidth]{images/template.png}
+        \includegraphics[width=.3\textwidth]{images/sheep.png}
         \caption{Template Examples}
-        \includegraphics[width=4cm]{images/template1.png}
-        \includegraphics[width=4cm]{images/template.png}
-        \includegraphics[width=4cm]{images/sheep.png}
         \label{templates}
     \end{figure}
     
-    The template is then moved across the image and we calculate a metric and get a value to help measure how closely the area matches our template, an example result is shown in fig.\ref{sheeps}, you can see hot spots where the pattern matches most. We can then pick out the spots that have the highest value and these are likely our sheep.
+    The template is then moved across the image and we calculate a metric and get a value to help measure how closely the area matches the template, an example result is shown in Fig. \ref{sheeps}, you can see hot spots where the pattern matches most. We can then pick out the spots that have the highest value and these are likely to be the sheep.
     
-    \begin{figure}
-    \caption{Templating Search}
-        \includegraphics[width=8cm]{images/sheeps.png}
-        \includegraphics[width=8cm]{images/sheeps1.png}
-        \includegraphics[width=10cm]{images/sheeps2.png}
-        \includegraphics[width=8cm]{images/sheeps3.png}
+    \begin{figure}[H]
+        \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.9\textwidth]{images/sheeps.png}
+        \caption{original image}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.9\textwidth]{images/sheeps1.png}
+        \caption{Step 1: Template applied}
+    \end{subfigure}
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.9\textwidth]{images/sheeps2.png}
+        \caption{Step 2: threshold the values form the template}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.9\textwidth]{images/sheeps3.png}
+        \caption{resulting found sheep}
+    \end{subfigure}
+        \caption{Templating Search example}
         \label{sheeps}
     \end{figure}
     
 \subsubsection{What is the best template to use?}
 
-A set of artificial sheep templates can be generated of different shapes and sizes. Then using the set of images in Appendix \ref{appendix:Images} the number of true positives, false positives and false negatives can be counted and compared to indicate which is the best template to use. 
+A set of artificial sheep templates can be generated of different shapes and sizes. Then using the set of images in Appendix \ref{appendix:Images} and applying the templates the number of true positives, false positives and false negatives can be counted and compared to indicate which is the best template to use. 
 
-\subsection{other approaches considered}
+\subsection{Other approaches considered}
 
-Alongside the two more primitive methods considered, there was consideration into trying a machine learning approach, where a object detection model is trained that can find te sheep for us. 
-For this a large amount of training and testing data would be required and a significant chunk of time is required to do the training. 
-This would be to time consuming for the time scale of this project, as it would likely require training the model a couple of times iterating on the training data set to ensure it is as diverse as possible.
+Alongside the two more primitive methods trialed, there was consideration into trying a machine learning approach, where an object detection model is trained that it can find the sheep for us. 
+For this a large amount of training and testing data would be required and a significant amount of time is required to do the training. 
+This would be too time consuming for the time scale of this project, as it would likely require long training times to iterate the model a couple of times on the training data set to ensure it is as diverse as possible.
 
 \section{How measurements and comparisons of results are to be made}
-A collection of sample images will be used, where the sheep in them can be manually be counted and located this will be the baseline source of truth, then take and process the set of sample images with each method and compare the number of sheep found. 
+A collection of sample images will be used, where the sheep in them can be manually counted and located, this will be the baseline source of truth. Then take and process the set of sample images with each method and compare the number of sheep found. 
 
-The issue with comparing the sheep count alone is there be false positives and false negatives giving a false impression that the method is finding the sheep correctly, so we also need to compare where in the images the sheep are detected match the manually found locations. This will show the true positives and allow us to identify the false positives and false negatives.
+The issue with comparing the sheep count alone is there be may be false positives and false negatives giving a false impression that the method is finding the sheep correctly. So a comparison is needed where in the images so that the sheep detected match the manually found locations. This will show the true positives and allow us to identify the false positives and false negatives.
 
-Using ROC graphs was considered but as there is not fixed number of true negative, the confusion matrices needed would be incomplete. 
+Using ROC graphs was considered but as there is no fixed number of true negatives, the confusion matrices needed would be incomplete. 
 
 \section{Support Tools}
 %TC:ignore
@@ -94,10 +124,15 @@ For the parts of your project that need some engineering (hardware, software, fi
 \end{comment}
 %TC:endignore
 
-backend: Python3, opencv, matplotlib, numpy, tifffle.
-programming UI: object oriented python for ease of use in scripts to build graphs etc.
-demo UI: flask simple webserver, django too comlex for this task, bulma make it look nice with not much hasle, (discuus potential to package cross platform with electron). 
+Backend: Python3, opencv, matplotlib, numpy, tifffle.
 
-design and implementation in Chapter \ref{software}
+Programming UI: object oriented python for ease of use in scripts to build graphs etc.
+
+Demo UI: flask simple webserver, django too comlex for this task, bulma to make it look nice with not much hasle, (discuus potential to package cross platform with electron). 
+
+Image viewing and manipulation: QGIS, GIMP, \LaTeX imagemagick
+
+
+Design and implementation is discussed in Chapter \ref{software}
 
 

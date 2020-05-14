@@ -27,13 +27,13 @@ Some example sub-sections may be as follows, but the specific sections are for y
 %TC:endignore
 \subsection{Overall Architecture}
 
-python modules, object oriented:
+Python modules, object oriented:
 
 ImageManager to handle loading, saving and standardising images and running the methods. Discussed in detail in section \ref{ImageManger}
 
-flask server to run UI and call ImageManager in user friendly way. Discussed in detail in section \ref{FlaskServer}
+Flask server to run UI and call ImageManager in user friendly way. Discussed in detail in section \ref{FlaskServer}
 
-finders, classes to implement the methods, flexible
+Finders, classes to implement the methods, flexible
 
 \begin{figure}
     \centering
@@ -45,16 +45,71 @@ finders, classes to implement the methods, flexible
 \subsection{Image Manager}
 \label{ImageManger}
 
-\subsubsection{Even more detail}
+Manages the loading and saving of the images, and running the finders on the images.
+
+Features:
+
+\begin{itemize}
+    \item One interface to load any image type, either grayscale, RGB or geoTiff images.
+    \item Method to run a finder on only a single image layer.
+    \item Method to run a finder on a combined single layer from multiple layers.
+    \item Method to run a finder on multiple image layers.
+    \item Method to save intermediary step images for analysis. Include options for transparency for overlaying.
+    \item Method to save an output image with the sheep highlighted. Again with options for transparency overlaying.
+    \item Store pixel locations of the sheep if they need to be accessed.
+\end{itemize}
+
 
 \subsection{User Interface}
 \label{FlaskServer}
 
+A server webpage to demo the code to none programmers. This will use a simple design using Bulma\cite{bulma} to save writing custom styling. Can be used locally or remotely. However, it is unable to handle sessions by individaul users so all images on the server are viewable by all users. Example use-case: images downloaded straight from drone onto under powered laptop. Then uploaded to a remote desktop to process the images and to give an idea of what the results might be before stitching.
+
+
+Features:
+
+\begin{itemize}
+    \item Download and upload images.
+    \item Form to run each of the methods.
+    \item Delete images from the server.
+\end{itemize}
+
 \subsection{Finders}
+
+By using an interface we can standardise how a finder is used by the imageManager so each finder class must implement the Finder interface. 
+
+\begin{itemize}
+    \item A finder must be able to take an image layer and process it.
+    \item Return a list of sheep location it has found. 
+    \item Optionally return any intermediary images that might be interesting.
+\end{itemize}
+
+Two Finders will be implemented, as described below.
+
 \subsubsection{Templating}
-\subsubsection{thresholding}
+
+Implementing the finder interface, apply's a threshold value to the image provided and locates the groupings of pixels left behind, if they have enough pixels in the group to find the sheep then it is counted as a as a sheep. The location of the sheep is then recorded
+
+\subsubsection{Thresholding}
+
+This method takes a template on initialisation and when called upon will take an image and apply the template across it using the openCV match template function\cite{opencv-python}. Then taking the result and processing it using a similar technique to the thresholding method to find the best match locations and counting them as sheep.
 
 \section{Implementation}
+
+\subsection{Python3}
+
+Using Python was a good decision as the implementation started as a linear program which was later expanded to be object oriented, this was very easy to do. Python is also very useful for running quick scripts anywhere for testing while developing solutions to problems.
+
+The main issue encountered with Python is it is not statically typed. This caused lots of issue while developing as variable and object types would get mixed up causing all sorts of issues. A lot of conversion was needed between types as libraries would all use different types. Also without the static types, the return types of methods used in libraries were not clear, and the IDE used during development would not provide hints as to how the object could be used. Extra research was needed to determine the return types. A decision was made that methods would try to specify static types where it could, this was useful when developing other parts of the code.
+
+Python is used by researchers in most fields, so writing the code in python will make it easy for future researchers or developers to take and expand on the code, implementing other finders for example a machine learning one. Python is also a hugely popular language so libraries were plentiful.
+
+\subsection{Opening tif Files}
+Opening geoTif files properly with all the data was a pain point, during development the project went through a number of libraries to find a good one to use. The use of tifffle was settled on and simplified the process in the end but it still needed custom tag copying for the geotiff data.
+
+\subsection{Finding groups of pixels}
+
+A custom implementation was written, but even after multithreading it was slow, and it was initially used for thresholding. A method in openCV called find contours was discovered while researching for templating. The project swapped to using that instead, although the implementation was left in as a lot was learned in the process of making it. Using the find contours method was much cleaner, but does not give the exact number of pixels in a group.
 
 %TC:ignore
 \begin{comment}
@@ -90,7 +145,7 @@ The following sections indicate some areas you might include. Other sections may
 Do little and often, while developing, write tests as I go, does this do what I want it to?
 
 \subsection{Automated Testing}
-Using an automated testing system such as Jenkins was considered but as the code for this project only produces images,  setting up a system to test them automatically would be a hassle as the code is not expected to produce perfect identical results every time and once the system to load and save the images is created it will not require ongoing testing. Unit testing that will be manually run will be created for testing that part. To produce the results the code behind that will be simple scripts that will be manually run.
+Using an automated testing system such as Jenkins was considered but as the code for this project only produces images.  Setting up a system to test them automatically would be problematic as the code is not expected to produce perfect identical results every time and once the system to load and save the images is created it will not require ongoing testing. Unit testing that will be manually run will be created for testing the subsequent parts. To produce the results the code behind the system to load and save images will be simple scripts that will be manually run.
 
 \subsubsection{Unit Tests}
 

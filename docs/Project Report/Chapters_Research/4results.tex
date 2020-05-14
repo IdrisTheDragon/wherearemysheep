@@ -12,7 +12,7 @@ If you had multiple experiments to run, it may be sensible to discuss each exper
 %TC:endignore
 
 
-\section{Colour bands}
+\section{Colour Bands}
 
 \begin{figure}[H]
     \centering
@@ -26,25 +26,25 @@ If you had multiple experiments to run, it may be sensible to discuss each exper
 \begin{subfigure}{.5\textwidth}
 \centering
     \includegraphics[width=\textwidth]{images/results/colour-compare/image-4-red.png}
-    \caption{red colour band}
+    \caption{Red colour band}
 
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
 \centering
     \includegraphics[width=\textwidth]{images/results/colour-compare/image-4-green.png}
-    \caption{green colour band}
+    \caption{Green colour band}
 
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
 \centering
     \includegraphics[width=\textwidth]{images/results/colour-compare/image-4-blue.png}
-    \caption{blue colour band}
+    \caption{Blue colour band}
 
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
 \centering
     \includegraphics[width=\textwidth]{images/results/colour-compare/image-4-rededge.png}
-    \caption{rededge colour band}
+    \caption{Red edge colour band}
 
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
@@ -57,10 +57,10 @@ If you had multiple experiments to run, it may be sensible to discuss each exper
     \label{fig:colour-bands}
 \end{figure}
 
-In figure \ref{fig:colour-bands} you can see that there are differences between the different colour bands on how well the sheep stand out. From looking at the images a guess can be made that red is probably the best band but we can confirm it. Using code \ref{Appendix:code:Splitting} to split an image into it's seperate colour bands. Then \ref{Appendix:code:averages} takes samples from the image. Which produces these results:
+Figure \ref{fig:colour-bands} shows that there are differences between the different colour bands on how well the sheep stand out. From looking at the images a guess can be made that red is probably the best colour band but this can be confirmed. Using code \ref{Appendix:code:Splitting} to split an image into it's separate colour bands. Then code \ref{Appendix:code:averages} takes samples from the image. Which produces these results:
 
 \begin{itemize}
-    \item red
+    \item Red
     
 background: 32.81967213114754
 
@@ -68,7 +68,7 @@ sheep: 228.42857142857142
 
 difference: 195.60889929742387
 
-\item blue
+\item Blue
 
 background: 52.24590163934426
 
@@ -76,7 +76,7 @@ sheep: 240.78571428571428
 
 difference: 188.53981264637002
 
-\item rededge
+\item Red edge
 
 background: 181.19672131147541
 
@@ -84,7 +84,7 @@ sheep: 243.85714285714286
 
 difference: 62.66042154566745
 
-\item near IR
+\item Near IR
 
 background: 201.65573770491804
 
@@ -94,11 +94,11 @@ difference: 35.84426229508196
 
 \end{itemize}
 
-From this we can see that the biggest difference between sheep and background is in the red colour band. With rededge and near IR preforming significantly worse.
+From this it can be seen that the biggest difference between sheep and background is in the red colour band. With red edge and near IR preforming significantly worse.
 
-But comparing the sheep values between red and rededge they are similar, but there is a big change in the background as vegetation has a colour spike in the rededge range which is why it is used when analysing vegetation. Using this change to our advantage it might be possible to emphasis the difference between sheep and none sheep by combining the layers together selectively.
+When comparing the sheep values between red and red edge they are similar, but there is a big change in the background as vegetation has a colour spike in the red edge range which is why it is used when analysing vegetation. By using this change to our advantage it might be possible to emphasis the difference between sheep and none sheep by combining the layers together selectively.
 
-For example using a weighting of [0.2,0.2,0.2,-0.2,-0.2] respectively for each band we get:
+For example using a weighting of [0.2, 0.2, 0.2, -0.2, -0.2] respectively for each band we get:
 
 background: 34.59016393442623
 
@@ -109,16 +109,16 @@ difference: 197.98126463700237
 \begin{figure}[H]
     \centering
     \includegraphics{images/results/colour-compare/image-4-combined.png}
-    \caption{Combined bands at weightings of [0.2,0.2,0.2,-0.2,-0.2]}
+    \caption{Combined bands at weightings of [0.2, 0.2, 0.2, -0.2, -0.2]}
     \label{fig:colour-bands-combined}
 \end{figure}
 
-Which gives us a bigger difference between sheep and background. Although using the rededge and near-IR  won't help us distinguish between rocks and sheep as the rededge change only happens for vegetation. For the rest of this project, the red band will continue to be used though for analysis as it will transfer better to images that are only RGB from a standard camera.
+This gives a bigger difference between sheep and background. Although using the red edge and near-IR will not help us distinguish between rocks and sheep as the red edge change only happens for vegetation. For the rest of this project, the red band will continue to be used though for analysis as it will transfer better to images that are only in RGB from a standard camera.
 
 \clearpage
 \section{Thresholding Results}
 
-Manual adjustments of the threshold value is required on an image by image basis to minimise false positives and false negatives. The issue with this method though is the that it not only picks up the sheep it also picks up anything bright some examples in fig.\ref{fig:threshfailures}.
+Manual adjustments of the threshold value is required on an image by image basis to minimise false positives and false negatives. The issue with this method though is the that it not only picks up the sheep it also picks up anything bright as shown in the examples in Fig. \ref{fig:threshfailures}.
     
     \begin{figure}
         \centering
@@ -131,7 +131,7 @@ Manual adjustments of the threshold value is required on an image by image basis
     
 \subsection{What is the best threshold value?}
 
-Using a set of thresholds and a set of images we can produce a set of results to compare.
+By using a set of thresholds and a set of images we can produce a set of results to compare.
 
 \begin{figure}[H]
     \centering
@@ -145,7 +145,7 @@ Using a set of thresholds and a set of images we can produce a set of results to
 \begin{subfigure}{.5\textwidth}
 \centering
     \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-1.png}
-    \caption{threshold results}
+    \caption{Threshold results}
 
 \end{subfigure}
 \begin{subfigure}{.9\textwidth}
@@ -158,7 +158,7 @@ Using a set of thresholds and a set of images we can produce a set of results to
     \label{fig:Threshold-Results-Image-1}
 \end{figure}
 
-For the first image seen in figure \ref{fig:Threshold-Results-Image-1}, which is a fairly simple image, with the sheep in the open on a relatively plain background, the lower threshold values are completely useless, producing far too many false positives to be useful. The value of 220 gives a perfect score finding all 11 sheep in the image, with no false positives. 240 and above some sheep are missed, so using a higher value may be detrimental if a sheep isn't perfectly lit. 
+For the first image seen in Figure \ref{fig:Threshold-Results-Image-1}, which is a fairly simple image, with the sheep in the open on a relatively plain background, the lower threshold values are completely useless, producing far too many false positives to be useful. The value of 220 gives a perfect score finding all 11 sheep in the image, with no false positives. With a value of 240 and above some sheep are missed, so using a higher value may be detrimental if a sheep is not perfectly lit. 
 
 \begin{figure}[H]
     \centering
@@ -172,7 +172,7 @@ For the first image seen in figure \ref{fig:Threshold-Results-Image-1}, which is
 \begin{subfigure}{.5\textwidth}
 \centering
     \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-2.png}
-    \caption{threshold results}
+    \caption{Threshold results}
 
 \end{subfigure}
 \begin{subfigure}{.9\textwidth}
@@ -185,7 +185,7 @@ For the first image seen in figure \ref{fig:Threshold-Results-Image-1}, which is
     \label{fig:Threshold-Results-Image-2}
 \end{figure}
 
-image-2 is a little trickier as seen in figure \ref{fig:Threshold-Results-Image-2}, with a building and the sheep obscured by shadow. 140 is the best threshold giving the most true positives but least false positives. Beyond this the true positives decrease but so do the false positives. This is not very useful a there are still false positives. If using the ideal true positive for image-1 of 220 for image-2, it would only find one of our sheep.
+Image-2 is a little trickier as seen in Figure \ref{fig:Threshold-Results-Image-2}, with a building and the sheep obscured by shadow. A value of 140 is the best threshold giving the most true positives and least false positives. Beyond this the true positives decrease but so do the false positives. This is not very useful a there are still false positives. If using the ideal true positive for image-1 of 220 for image-2, it would only find one of the sheep.
 
 \begin{figure}[H]
     \centering
@@ -199,7 +199,7 @@ image-2 is a little trickier as seen in figure \ref{fig:Threshold-Results-Image-
 \begin{subfigure}{.5\textwidth}
 \centering
     \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-3.png}
-    \caption{threshold results}
+    \caption{Threshold results}
 
 \end{subfigure}
 \begin{subfigure}{.9\textwidth}
@@ -212,8 +212,8 @@ image-2 is a little trickier as seen in figure \ref{fig:Threshold-Results-Image-
     \label{fig:Threshold-Results-Image-3}
 \end{figure}
 
-image-3 as seen in figure \ref{fig:Threshold-Results-Image-3} has a bright building and a path. In this image,
-120 is the best threshold with the most true positives and least false positives. Beyond this a number of sheep are lost and the false positive results reduces but never fully diminishes. Even at the 120 threshold there are still 177 false positives which makes it next to useless in finding sheep.
+Image-3 as seen in Figure \ref{fig:Threshold-Results-Image-3} has a bright building and a path. In this image,
+120 is the best threshold with the most true positives and least false positives. Above 120 a number of sheep are lost and the false positive results reduces but never fully diminishes. Even at the 120 threshold there  are still 177 false positives which makes it next to useless in finding sheep.
 
 \begin{figure}[H]
     \centering
@@ -227,7 +227,7 @@ image-3 as seen in figure \ref{fig:Threshold-Results-Image-3} has a bright build
 \begin{subfigure}{.5\textwidth}
 \centering
     \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-5.png}
-    \caption{threshold results}
+    \caption{Threshold results}
 
 \end{subfigure}
 \begin{subfigure}{.9\textwidth}
@@ -240,9 +240,9 @@ image-3 as seen in figure \ref{fig:Threshold-Results-Image-3} has a bright build
     \label{fig:Threshold-Results-Image-5}
 \end{figure}
 
-image-4 is not used for the thresholding as it wouldn't show mush as it so small.
+%Image-4 is not used for the thresholding test as it would not show much as it is so small.
 
-image-5 as seen in figure \ref{fig:Threshold-Results-Image-5}, does not have any sheep in it, but contains more than just plain grass. As the threshold value is increased, the number of false positives diminishes. The last few remaining false positives at the higher threshold values are highlighting rocks, that are big enough to count as sheep.
+Image-5 as seen in Figure \ref{fig:Threshold-Results-Image-5}, does not have any sheep in it, but contains more than just plain grass. As the threshold value is increased, the number of false positives diminishes. The last few remaining false positives at the higher threshold values are highlighting rocks, that are big enough to count as sheep.
 
 \begin{figure}[H]
     \centering
@@ -256,7 +256,7 @@ image-5 as seen in figure \ref{fig:Threshold-Results-Image-5}, does not have any
 \begin{subfigure}{.5\textwidth}
 \centering
     \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-6.png}
-    \caption{threshold results}
+    \caption{Threshold results}
 
 \end{subfigure}
 \begin{subfigure}{.9\textwidth}
@@ -269,7 +269,7 @@ image-5 as seen in figure \ref{fig:Threshold-Results-Image-5}, does not have any
     \label{fig:Threshold-Results-Image-6}
 \end{figure}
 
-image-6 as seen in figure \ref{fig:Threshold-Results-Image-6}, is similar to image-1, but has a few larger white rocks. 220 and 200 threshold gives best results because most true positives and least false positives. 140 and 160 might also be considered use able in this scenario. Again like image-1 the 240 threshold is too bright for our off white sheep.
+Image-6 as seen in Figure \ref{fig:Threshold-Results-Image-6}, is similar to image-1, but has a few larger white rocks. The 220 and 200 thresholds give the best results because they have the most true positives and least false positives. 140 and 160 might also be considered as usable in this scenario. Again like image-1 the 240 threshold is too bright for our off white sheep.
 
 \begin{figure}[H]
     \centering
@@ -296,7 +296,7 @@ image-6 as seen in figure \ref{fig:Threshold-Results-Image-6}, is similar to ima
     \label{fig:Threshold-Results-Image-7}
 \end{figure}
 
-image-7 as seen in figure \ref{fig:Threshold-Results-Image-7}, has 5 sheep but although the image is an extract from a larger image as the other images, The drone in this case seems to have gained altitude so the sheep are less clear as they are smaller. 200 threshold has the most true positives and least false positives in this image, but still has a high number of false positives. That continues to diminishes at the threshold of 240, where we also start loosing sheep. This is probably as the sheep are smaller in this image, so the central pixels of the sheep are darker as the darker green background is picked up form the surrounding area.
+Image-7 as seen in Figure \ref{fig:Threshold-Results-Image-7}, has 5 sheep but although the image is an extract from a larger image, The drone in this case seems to have gained altitude so the sheep are less clear as they are smaller. The 200 threshold has the most true positives and least false positives in this image, but still has a high number of false positives. The number of false positives continue to diminishes at the threshold of 240, where sheep also start to be lost. This is probably because the sheep are smaller in this image, so the central pixels of the sheep are darker as the darker green background is picked up form the surrounding area.
 
 \begin{figure}[H]
     \centering
@@ -310,7 +310,7 @@ image-7 as seen in figure \ref{fig:Threshold-Results-Image-7}, has 5 sheep but a
 \begin{subfigure}{.5\textwidth}
 \centering
     \includegraphics[width=.9\textwidth]{images/results/thresh-value/image-8.png}
-    \caption{threshold results}
+    \caption{Threshold results}
 
 \end{subfigure}
 \begin{subfigure}{.9\textwidth}
@@ -323,7 +323,7 @@ image-7 as seen in figure \ref{fig:Threshold-Results-Image-7}, has 5 sheep but a
     \label{fig:Threshold-Results-Image-8}
 \end{figure}
 
-image-8 as seen in figure \ref{fig:Threshold-Results-Image-8}, 3 sheep on green background with a red bush and a couple of other background features. The 240 threshold gives best results, most true positives and least false positive.
+Image-8 as seen in Figure \ref{fig:Threshold-Results-Image-8}, has 3 sheep on green background with a red bush and a couple of other background features. The 240 threshold gives best results, most true positives and least false positive.
 
 
 \begin{figure}[H]
@@ -334,13 +334,16 @@ image-8 as seen in figure \ref{fig:Threshold-Results-Image-8}, 3 sheep on green 
     \label{fig:Threshold-Results-combined}
 \end{figure}
 
-In figure \ref{fig:Threshold-Results-combined}, the results from all the images have been summed up. The best threshold to use in most cases would be any threshold of 200 or above as this gives the best results with the least false positives. But there is still a far too many false positives when looking at all the sample images used. All of the results would still need a manual review as with two of the images the true positive count goes down. The images this occurs for is one where there is shadows and buildings which could confuse the algorithm. However, there is adequate data here to show that in more 'plain' - both in shading and natural features environments this method would work well. But instroduing complex elements such as paths or buildings or white rocks then this method falls short of useable.
+In Figure \ref{fig:Threshold-Results-combined}, the results from all of the images have been summed up. The best threshold to use in most cases would be any threshold of 200 or above as this gives the best results with the least false positives. But there is still a far too many false positives when looking at all the sample images used. All of the results would still need a manual review as with two of the images the true positive count goes down. The images this occurs for are ones where there is shadows and buildings which could confuse the algorithm. However, there is adequate data here to show that in more 'plain' - both in shading and natural features environments this method would work well. But introducing complex elements such as paths or buildings or white rocks then this method falls short of useable.
 
 
 
 
 \section{Templating Results}
 
+
+\subsection{Artificial Templates}
+In Figure \ref{fig:Artifical-templates} is the set of templates that were tested, to locate sheep using the templating method. In general this method worked better than the thresholding method but requires careful selection of the template. Along with this A match value needs to be selected between 0 and 1 (0\% to 100\% match) as a threshold as the sheep will never 100\% match any of the templates. For this a high enough match percentage is needed to not pickup none sheep and to make sure an odd sheep are picked up. This project is also only looking at white sheep. templates of different colour sheep would be needed, none white sheep would not stand out as much so more fine tuning is required. The artificial templates used here are using 0 and 255 to emphasis the difference between what is sheep and what is background. Later on the report will demonstrate using sample images of extracted sheep images that have ranges closer together such as 40 and 200. These will make the sheep match with higher percentage, but it also picked up more rocks. Sheep are also long and slim, so testing with rotating templates around might also produce better results. But again this method is very sensitive to what is in the image and what scale the image is at.
 
 \begin{figure}[H]
     \centering
@@ -453,6 +456,8 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \label{fig:Artifical-templates}
 \end{figure}
 
+Each of the images in Appendix \ref{appendix:Images} was run through using each template from Figure \ref{fig:Artifical-templates}. The results can be seen and are discussed below.
+
 
 \begin{figure}[H]
     \centering
@@ -465,7 +470,7 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \begin{subfigure}{0.5\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/results/template-value/image-1.png}
-        \caption{template results}
+        \caption{Template results}
     \end{subfigure}
     \begin{subfigure}{\textwidth}
     \centering
@@ -476,6 +481,10 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \caption{Templating Results Image-1}
     \label{fig:Templating-Results-Image-1}
 \end{figure}
+
+For image-1, as seen in  Figure \ref{fig:Templating-Results-Image-1}, the 40x40 pixel template with width of 5 pixels and height of 2.5 pixels preformed best, with no false positives and finding all the sheep. The circular equivalent did not preform so well, but in this image, most of the sheep are oriented horizontally which does match the ellipse shape better. The 10-5 ellipse, essentially a sheep of same size as the best template but with less background attracts lots of false positives. So including background seems to be important, as well as getting the sheep template of a correct size, as seen by 40-15-ellipse with a high number of false positives.
+
+
 
 \begin{figure}[H]
     \centering
@@ -488,7 +497,7 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \begin{subfigure}{0.5\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/results/template-value/image-2.png}
-        \caption{template results}
+        \caption{Template results}
     \end{subfigure}
     \begin{subfigure}{\textwidth}
     \centering
@@ -499,6 +508,8 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \caption{Templating Results Image-2}
     \label{fig:Templating-Results-Image-2}
 \end{figure}
+
+For image-2, as seen in  Figure \ref{fig:Templating-Results-Image-2}, the best template for this image is 30-5-ellipse. This is a very similar result to image-1. How much background is needed seems to vary from image to image. Although the best for image-1 did perform admirably here with no false positives, but unfortunately it missed a few sheep.
 
 \begin{figure}[H]
     \centering
@@ -511,7 +522,7 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \begin{subfigure}{0.5\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/results/template-value/image-3.png}
-        \caption{template results}
+        \caption{Template results}
     \end{subfigure}
     \begin{subfigure}{\textwidth}
     \centering
@@ -522,6 +533,8 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \caption{Templating Results Image-3}
     \label{fig:Templating-Results-Image-3}
 \end{figure}
+
+For image-3, as seen in  Figure \ref{fig:Templating-Results-Image-3}, the best template to use is probably 30-5-ellipse or 40-5 circle, even if they do have a few false positives. again the best seen in image-1, 40-5-ellipse did not get any false positives but again has missed a couple of sheep. 
 
 \begin{figure}[H]
     \centering
@@ -534,7 +547,7 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \begin{subfigure}{0.5\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/results/template-value/image-5.png}
-        \caption{template results}
+        \caption{Template results}
     \end{subfigure}
     \begin{subfigure}{\textwidth}
     \centering
@@ -545,6 +558,8 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \caption{Templating Results Image-5}
     \label{fig:Templating-Results-Image-5}
 \end{figure}
+
+For image-5, as seen in  Figure \ref{fig:Templating-Results-Image-5}, this is an interesting one as it has no sheep. The templates 40-5-ellipse, 30-5-ellipse and 40-5-circle all performed perfectly in this scenario, with a couple of others showing promise as well. Again the 40-5-ellipse template is performing well.
 
 \begin{figure}[H]
     \centering
@@ -557,7 +572,7 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \begin{subfigure}{0.5\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/results/template-value/image-6.png}
-        \caption{template results}
+        \caption{Template results}
     \end{subfigure}
     \begin{subfigure}{\textwidth}
     \centering
@@ -568,6 +583,8 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \caption{Templating Results Image-6}
     \label{fig:Templating-Results-Image-6}
 \end{figure}
+
+This image-6, as seen in  Figure \ref{fig:Templating-Results-Image-6}, has very similar results to the image-1 results but some of the templates have struggled to distinguish between the small white rocks and the sheep. The best template this time is 40-5-circle, followed closely by 40-5-ellipse, which unfortunately misses the bottom right sheep, which is oriented vertically in the image unlike the horizontal ellipse template used. This highlights the need of reusing multiple passes with templates at different orientations or just using a circular template that ignores the orientation but have a lower match, and higher chance to identify rocks.
 
 \begin{figure}[H]
     \centering
@@ -580,7 +597,7 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \begin{subfigure}{0.5\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/results/template-value/image-7.png}
-        \caption{template results}
+        \caption{Template results}
     \end{subfigure}
     \begin{subfigure}{\textwidth}
     \centering
@@ -591,6 +608,9 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \caption{Templating Results Image-7}
     \label{fig:Templating-Results-Image-7}
 \end{figure}
+
+
+For image-7, as seen in Figure \ref{fig:Templating-Results-Image-7}, it is safe to say, none of the sheep were really found, the high number of false positives sees to that. This image is an extract from the same source image as the others, but the drone carrying the rededge camera has moved further away from the ground, making the sheep smaller in this image, so even the smallest sheep templates can not pick them out. Smaller sheep in templates would need to be used for this situation, possibly tailor made templates for every image could be needed, or even different templates would be needed for different parts of the image, but trying to tell where each template is best suited in a large image could be difficult.
 
 \begin{figure}[H]
     \centering
@@ -603,11 +623,11 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \begin{subfigure}{0.5\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/results/template-value/image-8.png}
-        \caption{template results}
+        \caption{Template results}
     \end{subfigure}
     \begin{subfigure}{\textwidth}
     \centering
-        \includegraphics[width=.9\textwidth]{images/results/templating/iamge-8.png}
+        \includegraphics[width=.9\textwidth]{images/results/templating/image-8.png}
         \caption{Graph showing results for templates on image-8}
     \end{subfigure}
     
@@ -615,6 +635,7 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \label{fig:Templating-Results-Image-8}
 \end{figure}
 
+For image-8, as seen in Figure \ref{fig:Templating-Results-Image-8}, the background is slightly more variable than in previous images, so our previously high scoring templates are a little lost here, although they are doing a good job at not getting any false positives. The best template for this image is 40-10-ellipse, suggesting that the drone may be closer to the ground than average as they needed a larger sized template for the sheep to be detected.  
 
 \begin{figure}[H]
     \centering
@@ -623,14 +644,51 @@ In figure \ref{fig:Threshold-Results-combined}, the results from all the images 
     \label{fig:Templating-Results-combined}
 \end{figure}
 
-But there is have similar issues with the templating method as there was with thresholding, rocks match with the template. To overcome this the template can be adjusted, for example the template can be rotated or look at using different ways to calculate the metric.\cite{opencv-python}
+None of the templates were perfect, but the 40-5-ellipse did a good job on finding most of the sheep without any false positives. Although using the 30-5-ellipse or 40-5-circle or even 30-5-circle templates would give better results closer to the true number, while still picking up some false positives. These templates could potentially be used as part of a more complex system to detect these sheep. Using the template method is quick, so a simple catch all template could be used to initially to find all the sheep with lots of false positives, then applying more refined templates on the areas the sheep were detected to identify only the sheep and cut out the number of false positives. 
 
+Another thing to bear in mind for using templates is that they give a value between 0 and 1 on how well the template matches each pixel, then a threshold is used to select all the ones above a certain value of matching, for this run a value of 0.5 was used for all images. So the ones with lots of false positives could possibly need a higher value to be used to filter out more of the false positives. To resolve this would require running all the templates against all the images again, but also running it against a range of threshold values to see how the change in threshold changes the false positive rate, it may also negatively effect the true positive rate as sheep with lower match score may be eliminated. This would produce even more data to be processed and analysed. This would reveal the best threshold for each template, then using the threshold and template pair a better comparison could be made between the templates. With each using it's optimum threshold. This may produce even better results than currently.
 
-    
-    
+From the results here though we can identify that having a bigger template is beneficial. It also shows that the orientation of the template may have a role to play, as in the cases where the sheep were vertical in the images the horizontal ellipses did not preform too well.
+
+A one sized fits all template would be very difficult to achieve as shown by how even the best performing templates get tripped up when the sheep in the image are bigger or smaller. Sheep in general vary in size, especially during lambing season with lots of small lambs running around and being quite small. Also how well lit the sheep are seems to play a roll in detecting the sheep as shown by image-2 with the sheep hidden in shadow from the building.
+
+\subsection{Extracted Templates}
+
+Using knowledge from the previous results we can extract a couple of images of actual sheep and use them on our set of images. A higher threshold will be used at 0.9. The template will have a reasonable amount of background surrounding it.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/results/image-4.png}
+    \caption{Template used for this section 61x49}
+    \label{fig:template}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/results/templating/file1.png}
+    \caption{Showing results for template on the images}
+    \label{fig:Templating-Results-for-template}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/results/templating/file2.png}
+    \caption{Showing results for template on the images, part 2}
+    \label{fig:Templating-Results-for-template1}
+\end{figure}
+
+Interestingly using a actual sheep as a template has produced worse results as the background more closely matches so all the results are closer together even though the average match percentage is higher, so a higher threshold is used to get rid of many of the false positives. This shows that using a template with exaggerated features works much better.
 
 \section{Method Comparison}
 
-\subsection{Other methods discussion}
+Of the two methods used the templating method is superior when using the 40-5-ellipse template, tweaking the threshold value from 0.5 might also improve it's rating. 
+
+The template method would also be far more useful in identifying sheep that are grey or black as other templates not explored here could be used. Whilst the threshold method can only distinguish between bright and dark colours with any accuracy. Although a jump can be seen between red and red edge on vegetation compared to a sheep. So potentially this could be used to identify black and grey sheep.
+
+
 
 \section{Conclusion}
+Both methods trailed, do miss sheep or have a significant number of false positives so would not be practical to use in the field. But with that being said, the templating method does have room for expansion, such as rotating template applied or attempting to optimise the template for each part of the image.
+
+\subsection{Other methods}
+
+A machine learning method was briefly looked into using the tensorflow object detection API \url{https://github.com/tensorflow/models/tree/master/research/object_detection}. This could be a straight foreword way to automate the sheep detecting. However, this method requires building a set of training and test data to train the model. Producing this was out of the scope for this project. A follow up project could dive into this directly and looking at the results from other object detection models a sheep finding one would likely be better than trying other primative computer vision methods. The model could also be trained to recognise black or grey sheep. This model could even be trained with other mammals such as deer. This would make the technique a lot more useful.
