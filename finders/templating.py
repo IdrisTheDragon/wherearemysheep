@@ -8,9 +8,10 @@ import numpy as np
 
 class Templating(Finder):
 
-    def __init__(self,template=None,threshold=0.75):
+    def __init__(self,template=None,threshold=0.75,variableThreshold=False):
         self.template= template
         self.threshold = threshold
+        self.variableThreshold = variableThreshold
 
     def findInImage(self,image):
         if image is None or len(image.shape) is not 2:
@@ -28,8 +29,12 @@ class Templating(Finder):
         m,M,m_1,M_1 = cv2.minMaxLoc(d)
         print(m,M,m_1,M_1)
 
+        threshold = self.threshold
+        if self.variableThreshold:
+            threshold = M - threshold
+
         locations = []
-        _,d2 = cv2.threshold(d, self.threshold, 1, cv2.THRESH_BINARY)
+        _,d2 = cv2.threshold(d, threshold, 1, cv2.THRESH_BINARY)
         d2 = cv2.normalize(d2, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
         d = cv2.normalize(d, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
         contours, hier = cv2.findContours(d2, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)

@@ -12,6 +12,16 @@ from tifffile import TiffFile
 
 def tifToPNG():
     for x in range(1,9):
+        with TiffFile("/home/nathan/major-project/wheresmysheep/results/images/template-results2/{0}.tif".format(x)) as tif:
+            image = tif.asarray()
+            r = image[:, :, 0]
+            g = image[:, :, 1]
+            b = image[:, :, 2]
+            outlined = cv2.merge((r, g, b))
+            cv2.imwrite("/home/nathan/major-project/wheresmysheep/results/images/template-results2/image-temp-{0}.png".format(x),outlined)
+
+def tifToPNG2():
+    for x in range(1,9):
         with TiffFile("images/image-{0}.tif".format(x)) as tif:
             image = tif.asarray()
             r = image[:, :, 0]
@@ -19,7 +29,6 @@ def tifToPNG():
             b = image[:, :, 2]
             outlined = cv2.merge((r, g, b))
             cv2.imwrite("images/image-{0}.png".format(x),outlined)
-
 
 def threshold(filename):
     m = Thresholding(threshold_value=180,min_width_height=4)
@@ -154,13 +163,13 @@ def testExtraTemplates(filename):
     order = []
     template = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
     print(template.shape)
-    m = Templating(template, 0.90)
+    m = Templating(template, 0.9,False)
     for x in range(1,9):
         s: ImageManager = ImageManager('images/image-{0}.tif'.format(x))
         s.singleLayerFind(m, 0)
         s.saveIntermidiary('images/template-results2/{0}.tif'.format(x))
         s.outline_mammal(baseImage='rgb')
-        s.saveOutlined('images/template-results2/{0}'.format(x))
+        s.saveOutlined('images/template-results2/image-{0}.png'.format(x))
         sheeps.append(len(s.locations))
         order.append(x)
 
@@ -191,7 +200,8 @@ if __name__ == '__main__':
     #testTempaltes('images/image-5.tif')
     #testTempaltes('images/image-6.tif')
     #testTempaltes('images/image-7.tif')
-    testTempaltes('images/image-8.tif')
-    #testExtraTemplates('images/image-4.png')
+    #testTempaltes('images/image-8.tif')
+    testExtraTemplates('images/image-4.png')
+    #tifToPNG()
     #testExtraTemplates('images/sheep_(839, 3432).tif')
     #testExtraTemplates('images/image-4-crop.png')
